@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/lostItems", db.getLostItems);
 app.get("/lostItems/:id", db.getLostItemById);
+app.post("/lostItems", db.createLostItem);
 app.get("/foundItems", db.getFoundItems);
 app.get("/foundItems/:id", db.getFoundItemById);
 
