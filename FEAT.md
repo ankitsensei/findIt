@@ -1,5 +1,23 @@
 # findIt
 
+# Features
+
+- User accounts
+- Report lost items
+- Report found items
+- Search by category/location
+- Image upload
+- Claim request system
+- Admin approval
+- Email notifications
+- Learn
+- Authentication
+- File uploads
+- Search
+- Authorization
+- Notifications
+<hr >
+
 ## MVP (Build this first)
 
 ### 1. Authentication
