@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
 app.get("/lostItems", db.getLostItems);
 app.get("/lostItems/:id", db.getLostItemById);
 app.get("/foundItems", db.getFoundItems);
+app.get("/foundItems/:id", db.getFoundItemById);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
