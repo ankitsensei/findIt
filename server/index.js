@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/lostItems", db.getLostItems);
+app.get("/lostItems/:id", db.getLostItemById);
 app.get("/foundItems", db.getFoundItems);
 
 app.listen(PORT, () => {

@@ -15,6 +15,18 @@ const getLostItems = async (req, res) => {
   }
 };
 
+const getLostItemById = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const results = await pool.query("SELECT * FROM lostitems WHERE id=$1", [
+      id,
+    ]);
+    res.status(200).json(results.rows);
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Found Items
 const getFoundItems = async (req, res) => {
   try {
@@ -25,4 +37,4 @@ const getFoundItems = async (req, res) => {
   }
 };
 
-export { getLostItems, getFoundItems };
+export { getLostItems, getLostItemById, getFoundItems };
