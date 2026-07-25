@@ -62,10 +62,24 @@ const getFoundItemById = async (req, res) => {
   }
 };
 
+const createFoundItem = async (req, res) => {
+  const { name, description, image_url, image_public_id, location } = req.body;
+  try {
+    const results = await pool.query(
+      "INSERT INTO founditems (name, description, image_url, image_public_id, location) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [name, description, image_url, image_public_id, location],
+    );
+    res.status(201).json(results.rows[0]);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   getLostItems,
   getLostItemById,
   createLostItem,
   getFoundItems,
   getFoundItemById,
+  createFoundItem,
 };
