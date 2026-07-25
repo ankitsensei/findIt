@@ -10,7 +10,6 @@ const getLostItems = async (req, res) => {
   try {
     const results = await pool.query("SELECT * FROM lostitems");
     res.status(200).json(results.rows);
-    res.status(200).json({ message: "hey" });
   } catch (error) {
     throw error;
   }
