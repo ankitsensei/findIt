@@ -18,8 +18,12 @@ const getLostItems = async (req, res) => {
 
 // Found Items
 const getFoundItems = async (req, res) => {
-  console.log("Get all found items");
-  res.send("Get all found items");
+  try {
+    const results = await pool.query("SELECT * FROM founditems");
+    res.status(200).json(results.rows);
+  } catch (error) {
+    throw error;
+  }
 };
 
 export { getLostItems, getFoundItems };
