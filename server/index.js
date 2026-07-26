@@ -24,6 +24,7 @@ app.get("/foundItems/:id", db.getFoundItemById);
 app.post("/foundItems", db.createFoundItem);
 app.put("/foundItems/:id", db.updateFoundItem);
 app.put("/foundItems/:id", db.softDeleteFoundItem);
+app.delete("/foundItems/:id", db.deleteFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
