@@ -72,6 +72,17 @@ const softDeleteLostItem = async (req, res) => {
   }
 };
 
+const deleteLostItem = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  try {
+    await pool.query("DELETE FROM lostitems WHERE id = $1", [id]);
+    res.status(200).send(`User deleted with id: ${id}`);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // Found Items
 const getFoundItems = async (req, res) => {
   try {
@@ -146,6 +157,7 @@ export {
   createLostItem,
   updateLostItem,
   softDeleteLostItem,
+  deleteLostItem,
   getFoundItems,
   getFoundItemById,
   createFoundItem,
