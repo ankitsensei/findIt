@@ -62,10 +62,10 @@ const updateLostItem = async (req, res) => {
 const softDeleteLostItem = async (req, res) => {
   const id = req.params.id;
   try {
-    await pool.query("UPDATE lostitems set deleted_at = NOW() WHERE id = $1", [
+    await pool.query("UPDATE lostitems SET deleted_at = NOW() WHERE id = $1", [
       id,
     ]);
-    res.status(200).send(`User updated with id: ${id}`);
+    res.status(200).send(`Lost Item updated with id: ${id}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -127,6 +127,19 @@ const updateFoundItem = async (req, res) => {
   }
 };
 
+const softDeleteFoundItem = async (req, res) => {
+  const id = req.params.id;
+  try {
+    await pool.query("UPDATE founditems SET deleted_at = NOW() WHERE id = $1", [
+      id,
+    ]);
+    res.status(200).send(`Found Item updated with id: ${id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export {
   getLostItems,
   getLostItemById,
@@ -137,4 +150,5 @@ export {
   getFoundItemById,
   createFoundItem,
   updateFoundItem,
+  softDeleteFoundItem,
 };
