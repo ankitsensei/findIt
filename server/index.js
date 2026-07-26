@@ -20,6 +20,7 @@ app.put("/lostItems/:id", db.updateLostItem);
 app.get("/foundItems", db.getFoundItems);
 app.get("/foundItems/:id", db.getFoundItemById);
 app.post("/foundItems", db.createFoundItem);
+app.put("/foundItems/:id", db.updateFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
