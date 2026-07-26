@@ -17,6 +17,7 @@ app.get("/lostItems", db.getLostItems);
 app.get("/lostItems/:id", db.getLostItemById);
 app.post("/lostItems", db.createLostItem);
 app.put("/lostItems/:id", db.updateLostItem);
+app.patch("/lostItems/:id", db.softDeleteLostItem);
 app.get("/foundItems", db.getFoundItems);
 app.get("/foundItems/:id", db.getFoundItemById);
 app.post("/foundItems", db.createFoundItem);
