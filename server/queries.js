@@ -40,6 +40,25 @@ const createLostItem = async (req, res) => {
   }
 };
 
+const updateLostItem = async (req, res) => {
+  const id = req.params.id;
+  const { name, description, image_url, image_public_id, location } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE lostitems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, updated_at = NOW() WHERE id = $6 RETURNING *`,
+      [name, description, image_url, image_public_id, location, id],
+    );
+    if (result.rowCount === 0) {
+      return res.status(400).json({ message: "Item not found." });
+    }
+    res.status(200).send(`Item modified with ID: ${id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Found Items
 const getFoundItems = async (req, res) => {
   try {
@@ -79,6 +98,7 @@ export {
   getLostItems,
   getLostItemById,
   createLostItem,
+  updateLostItem,
   getFoundItems,
   getFoundItemById,
   createFoundItem,
