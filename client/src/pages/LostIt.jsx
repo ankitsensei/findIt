@@ -33,17 +33,17 @@ const LostIt = () => {
       </div>
     );
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-2">
-          Lost Items
-        </h1>
-        <p className="text-center text-gray-500 mb-10">
-          Browse recently reported lost items.
-        </p>
+    <div className="min-h-screen bg-zinc-50 py-12 px-6">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12 text-center">
+          <h1 className="text-3xl font-semibold text-zinc-900">Lost Items</h1>
+          <p className="mt-2 text-sm text-zinc-500">
+            Recently reported lost items
+          </p>
+        </div>
 
         {lostData.length === 0 ? (
-          <div className="text-center text-gray-500 text-lg">
+          <div className="rounded-xl border border-zinc-200 bg-white py-16 text-center text-zinc-500">
             No lost items found.
           </div>
         ) : (
@@ -51,36 +51,46 @@ const LostIt = () => {
             {lostData.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200"
+                className="overflow-hidden rounded-2xl border border-zinc-200 bg-white transition hover:-translate-y-1 hover:shadow-lg"
               >
-                <img src={item.image_url} alt="" />
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">
-                    {item.name}
-                  </h2>
+                <img
+                  src={item.image_url}
+                  alt={item.name}
+                  className="h-92 w-full object-cover"
+                />
 
-                  <span className="bg-red-100 text-red-600 text-xs font-semibold px-3 py-1 rounded-full">
-                    LOST
-                  </span>
-                </div>
+                <div className="space-y-4 p-5">
+                  <div className="flex items-start justify-between">
+                    <h2 className="text-lg font-medium text-zinc-900">
+                      {item.name}
+                    </h2>
 
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <p className="font-semibold text-gray-700">Description</p>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-gray-500">
-                    <MapPin size={16} />
-                    <span>{item.location}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-gray-500">
-                    <Clock size={16} />
-                    <span>
-                      {new Date(item.created_at).toLocaleDateString()}
+                    <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600">
+                      LOST
                     </span>
                   </div>
+
+                  <p className="line-clamp-2 text-sm leading-6 text-zinc-600">
+                    {item.description}
+                  </p>
+
+                  <div className="space-y-2 border-t border-zinc-100 pt-4 text-sm text-zinc-500">
+                    <div className="flex items-center gap-2">
+                      <MapPin size={16} strokeWidth={1.8} />
+                      <span>{item.location}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Clock size={16} strokeWidth={1.8} />
+                      <span>
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button className="w-full rounded-lg border border-zinc-200 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100">
+                    View Details
+                  </button>
                 </div>
               </div>
             ))}
