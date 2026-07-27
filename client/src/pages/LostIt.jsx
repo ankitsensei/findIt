@@ -74,7 +74,7 @@ const LostIt = () => {
                     {item.description}
                   </p>
 
-                  <div className="space-y-2 border-t border-zinc-100 pt-4 text-sm text-zinc-500">
+                  <div className="space-y-2 border-t border-zinc-100 pt-4 text-sm text-zinc-500 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <MapPin size={16} strokeWidth={1.8} />
                       <span>{item.location}</span>
