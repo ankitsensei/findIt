@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MapPin, Clock } from "lucide-react";
 
 const LostIt = () => {
   const [lostData, setLostData] = useState([]);
@@ -52,6 +53,7 @@ const LostIt = () => {
                 key={item.id}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200"
               >
+                <img src={item.image_url} alt="" />
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-semibold text-gray-800">
                     {item.name}
@@ -68,16 +70,16 @@ const LostIt = () => {
                     <p className="text-gray-600">{item.description}</p>
                   </div>
 
-                  <div>
-                    <p className="font-semibold text-gray-700">Location</p>
-                    <p className="text-gray-600">{item.location}</p>
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <MapPin size={16} />
+                    <span>{item.location}</span>
                   </div>
 
-                  <div>
-                    <p className="font-semibold text-gray-700">Reported On</p>
-                    <p className="text-gray-600">
-                      {new Date(item.created_at).toLocaleString()}
-                    </p>
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Clock size={16} />
+                    <span>
+                      {new Date(item.created_at).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
               </div>
