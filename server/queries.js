@@ -1,9 +1,29 @@
 import "dotenv/config";
+import { v2 as cloudinary } from "cloudinary";
+import streamifier from "streamifier";
 import pg from "pg";
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
+
+const uploadImage = (buffer, folder) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder },
+      (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      },
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
 
 // Lost Items
 const getLostItems = async (req, res) => {
@@ -11,7 +31,8 @@ const getLostItems = async (req, res) => {
     const results = await pool.query("SELECT * FROM lostitems");
     res.status(200).json(results.rows);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -23,20 +44,35 @@ const getLostItemById = async (req, res) => {
     ]);
     res.status(200).json(results.rows);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 const createLostItem = async (req, res) => {
-  const { name, description, image_url, image_public_id, location } = req.body;
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required." });
+    }
+
+    const { name, description, location } = req.body;
+
+    if (!name || !description || !location) {
+      return res
+        .status(400)
+        .json({ message: "Name, description, and location are required." });
+    }
+
+    const image = await uploadImage(req.file.buffer, "findit/lost-items");
+
     const results = await pool.query(
       "INSERT INTO lostitems (name, description, image_url, image_public_id, location) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, description, image_url, image_public_id, location],
+      [name, description, image.secure_url, image.public_id, location],
     );
     res.status(201).json(results.rows[0]);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -79,6 +115,7 @@ const deleteLostItem = async (req, res) => {
     res.status(200).send(`Lost item deleted with id: ${id}`);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -88,7 +125,8 @@ const getFoundItems = async (req, res) => {
     const results = await pool.query("SELECT * FROM founditems");
     res.status(200).json(results.rows);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -100,20 +138,35 @@ const getFoundItemById = async (req, res) => {
     ]);
     res.status(200).json(results.rows);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 const createFoundItem = async (req, res) => {
-  const { name, description, image_url, image_public_id, location } = req.body;
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required." });
+    }
+
+    const { name, description, location } = req.body;
+
+    if (!name || !description || !location) {
+      return res
+        .status(400)
+        .json({ message: "Name, description, and location are required." });
+    }
+
+    const image = await uploadImage(req.file.buffer, "findit/found-items");
+
     const results = await pool.query(
       "INSERT INTO founditems (name, description, image_url, image_public_id, location) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, description, image_url, image_public_id, location],
+      [name, description, image.secure_url, image.public_id, location],
     );
     res.status(201).json(results.rows[0]);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -157,6 +210,7 @@ const deleteFoundItem = async (req, res) => {
     res.status(200).send(`Found item deleted with id: ${id}`);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
