@@ -28,7 +28,9 @@ const uploadImage = (buffer, folder) => {
 // Lost Items
 const getLostItems = async (req, res) => {
   try {
-    const results = await pool.query("SELECT * FROM lostitems");
+    const results = await pool.query(
+      "SELECT * FROM lostitems ORDER BY created_at DESC",
+    );
     res.status(200).json(results.rows);
   } catch (error) {
     console.error(error);
