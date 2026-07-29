@@ -35,7 +35,7 @@ const FoundIt = () => {
     );
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-8 md:py-12 px-4 md:px-6">
+    <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 md:mb-12 text-center flex flex-col items-center  ">
           <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900">

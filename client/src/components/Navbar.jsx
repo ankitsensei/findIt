@@ -8,7 +8,7 @@ const Navbar = () => {
     }`;
 
   return (
-    <nav className="w-full flex items-center justify-between px-6 py-4 bg-zinc-200">
+    <nav className="w-full flex items-center justify-between px-6 py-4 bg-zinc-200 fixed top-0 left-0 right-0 z-50">
       <NavLink to="/" className="text-xl font-bold text-black tracking-tight">
         findIt
       </NavLink>
