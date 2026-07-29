@@ -27,7 +27,16 @@ const uploadImage = (buffer, folder) => {
 
 // Lost Items
 const getLostItems = async (req, res) => {
+  const { searchItem } = req.query;
   try {
+    if (searchItem) {
+      console.log(searchItem);
+      const results = await pool.query(
+        `SELECT * from lostitems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT 20 OFFSET 0`,
+        [`%${searchItem}%`],
+      );
+      res.status(200).json(results.rows);
+    }
     const results = await pool.query(
       "SELECT * FROM lostitems ORDER BY created_at DESC LIMIT 20 OFFSET 0",
     );
