@@ -128,18 +128,26 @@ const LostIt = () => {
           </div>
         )}
       </div>
-      <div className="flex items-center w-full">
-        <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-          Previous
+      <div className="mt-10 flex items-center justify-center gap-4">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((p) => p - 1)}
+          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          ← Previous
         </button>
-        <p>
-          Page {page} of {totalPages}
-        </p>
+
+        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+          Page <span className="font-semibold">{page}</span> of{" "}
+          <span className="font-semibold">{totalPages}</span>
+        </div>
+
         <button
           disabled={page === totalPages}
-          onClick={() => setPage(page + 1)}
+          onClick={() => setPage((p) => p + 1)}
+          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Next
+          Next →
         </button>
       </div>
     </div>
