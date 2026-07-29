@@ -4,10 +4,13 @@ import { MapPin, Clock } from "lucide-react";
 const FoundIt = () => {
   const [foundData, setfoundData] = useState([]);
   const [foundDataLoaded, setfoundDataLoaded] = useState(false);
+  const [search, setSearch] = useState("");
 
   const fetchfoundData = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/foundItems`);
+      const res = await fetch(
+        `http://localhost:3000/foundItems?search=${encodeURIComponent(search)}`,
+      );
       const json = await res.json();
       setfoundData(json);
       setfoundDataLoaded(true);
@@ -21,7 +24,7 @@ const FoundIt = () => {
       fetchfoundData();
     }, 300);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [search]);
 
   if (!foundDataLoaded)
     return (
@@ -34,13 +37,28 @@ const FoundIt = () => {
   return (
     <div className="min-h-screen bg-zinc-50 py-8 md:py-12 px-4 md:px-6">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 md:mb-12 text-center">
+        <div className="mb-8 md:mb-12 text-center flex flex-col items-center  ">
           <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900">
             Found Items
           </h1>
           <p className="mt-2 text-xs md:text-sm text-zinc-500">
             Recently reported found items
           </p>
+          <form className="flex items-center gap-2 rounded-lg border w-1/2 mt-2">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search items..."
+              className="w-full px-3 py-2 outline-none"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-r-lg h-full bg-amber-200"
+            >
+              Search
+            </button>
+          </form>
         </div>
 
         {foundData.length === 0 ? (
@@ -76,7 +94,11 @@ const FoundIt = () => {
 
                   <div className="border-t border-zinc-100 pt-3 md:pt-4 mt-3 md:mt-4 text-xs md:text-sm text-zinc-500 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5 md:gap-2 min-w-0">
-                      <MapPin size={14} strokeWidth={1.8} className="shrink-0" />
+                      <MapPin
+                        size={14}
+                        strokeWidth={1.8}
+                        className="shrink-0"
+                      />
                       <span className="truncate">{item.location}</span>
                     </div>
                     <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
