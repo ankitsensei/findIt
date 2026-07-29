@@ -5,14 +5,17 @@ const LostIt = () => {
   const [lostData, setLostData] = useState([]);
   const [lostDataLoaded, setLostDataLoaded] = useState(false);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fetchLostData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/lostItems?search=${encodeURIComponent(search)}`,
+        `http://localhost:3000/lostItems?page=${page}&search=${search}`,
       );
       const json = await res.json();
-      setLostData(json);
+      setLostData(json.items);
+      setTotalPages(json.totalPages);
       setLostDataLoaded(true);
     } catch (error) {
       console.error(error);
@@ -24,7 +27,7 @@ const LostIt = () => {
       fetchLostData();
     }, 300);
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, page]);
   console.log(lostData);
 
   if (!lostDataLoaded)
@@ -45,11 +48,17 @@ const LostIt = () => {
           <p className="mt-2 text-xs md:text-sm text-zinc-500">
             Recently reported lost items
           </p>
-          <form className="flex items-center gap-2 rounded-lg border w-1/2 mt-2">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex items-center gap-2 rounded-lg border w-1/2 mt-2"
+          >
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               placeholder="Search items..."
               className="w-full px-3 py-2 outline-none"
             />
@@ -118,6 +127,20 @@ const LostIt = () => {
             ))}
           </div>
         )}
+      </div>
+      <div className="flex items-center w-full">
+        <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+          Previous
+        </button>
+        <p>
+          Page {page} of {totalPages}
+        </p>
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

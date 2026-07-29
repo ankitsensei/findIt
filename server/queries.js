@@ -27,21 +27,32 @@ const uploadImage = (buffer, folder) => {
 
 // Lost Items
 const getLostItems = async (req, res) => {
-  const { search } = req.query;
+  const { page = 1, search } = req.query;
+  const limit = 20;
+  const offset = (page - 1) * limit;
   console.log(search);
   try {
+    // For total count of entries
+    const countResult = await pool.query(`SELECT COUNT(*) FROM lostitems`);
+    const totalItems = Number(countResult.rows[0].count);
     if (search) {
       console.log(search);
       const results = await pool.query(
-        `SELECT * from lostitems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT 20 OFFSET 0`,
-        [`%${search}%`],
+        `SELECT * from lostitems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+        [`%${search}%`, limit, offset],
       );
       res.status(200).json(results.rows);
     }
     const results = await pool.query(
       "SELECT * FROM lostitems ORDER BY created_at DESC LIMIT 20 OFFSET 0",
     );
-    res.status(200).json(results.rows);
+    // res.status(200).json(results.rows);
+    res.status(200).json({
+      items: results.rows,
+      totalItems,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalItems / limit),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
