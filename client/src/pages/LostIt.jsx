@@ -7,6 +7,7 @@ const LostIt = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [jumpPage, setJumpPage] = useState("");
 
   const fetchLostData = async () => {
     try {
@@ -149,6 +150,31 @@ const LostIt = () => {
         >
           Next →
         </button>
+        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+          Jump to
+          <input
+            type="number"
+            placeholder="1"
+            value={jumpPage}
+            onChange={(e) => setJumpPage(e.target.value)}
+            min={1}
+            max={totalPages}
+            className="px-2 w-20 outline-none"
+          />
+          <button
+            onClick={() => {
+              const pageNum = Number(jumpPage);
+
+              if (pageNum >= 1 && pageNum <= totalPages) {
+                setPage(pageNum);
+              }
+
+              setJumpPage("");
+            }}
+          >
+            Go
+          </button>
+        </div>
       </div>
     </div>
   );
