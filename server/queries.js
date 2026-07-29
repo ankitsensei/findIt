@@ -133,7 +133,16 @@ const deleteLostItem = async (req, res) => {
 
 // Found Items
 const getFoundItems = async (req, res) => {
+  const { search } = req.query;
+  console.log(search);
   try {
+    if (search) {
+      const results = await pool.query(
+        `SELECT * FROM founditems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT 20 OFFSET 0`,
+        [`%${search}%`],
+      );
+      res.status(200).json(results.rows);
+    }
     const results = await pool.query(
       "SELECT * FROM founditems ORDER BY created_at DESC LIMIT 20 OFFSET 0",
     );
