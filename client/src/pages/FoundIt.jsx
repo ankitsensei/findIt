@@ -122,7 +122,7 @@ const FoundIt = () => {
 
                   <NavLink
                     to={`/foundit/${item.id}`}
-                    className="mt-auto block w-full rounded-lg border border-zinc-200 py-2 text-xs md:text-sm font-medium text-zinc-700 text-center transition hover:bg-zinc-100"
+                    className="mt-2 block w-full rounded-lg border border-zinc-200 py-2 text-xs md:text-sm font-medium text-zinc-700 text-center transition hover:bg-zinc-100"
                   >
                     View Details
                   </NavLink>
