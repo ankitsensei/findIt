@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar.jsx";
 import App from "./App.jsx";
 import LostIt from "./pages/LostIt.jsx";
 import FoundIt from "./pages/FoundIt.jsx";
+import ViewDetails from "./components/ViewDetails.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -15,7 +16,9 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/lostit" element={<LostIt />} />
+        <Route path="/lostit/:id" element={<ViewDetails />} />
         <Route path="/foundit" element={<FoundIt />} />
+        <Route path="/foundit/:id" element={<ViewDetails />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
