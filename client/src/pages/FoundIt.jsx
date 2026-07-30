@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router";
 import { MapPin, Clock } from "lucide-react";
 
 const FoundIt = () => {
@@ -119,9 +120,12 @@ const FoundIt = () => {
                     </div>
                   </div>
 
-                  <button className="mt-auto w-full rounded-lg border border-zinc-200 py-2 text-xs md:text-sm font-medium text-zinc-700 transition hover:bg-zinc-100">
+                  <NavLink
+                    to={`/foundit/${item.id}`}
+                    className="mt-auto block w-full rounded-lg border border-zinc-200 py-2 text-xs md:text-sm font-medium text-zinc-700 text-center transition hover:bg-zinc-100"
+                  >
                     View Details
-                  </button>
+                  </NavLink>
                 </div>
               </div>
             ))}
