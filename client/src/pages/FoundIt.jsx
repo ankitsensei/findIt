@@ -159,6 +159,15 @@ const FoundIt = () => {
             min={1}
             max={totalPages}
             className="px-2 w-20 outline-none"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const pageNum = Number(jumpPage);
+                if (pageNum >= 1 && pageNum <= totalPages) {
+                  setPage(pageNum);
+                }
+                setJumpPage("");
+              }
+            }}
           />
           <button
             onClick={() => {
