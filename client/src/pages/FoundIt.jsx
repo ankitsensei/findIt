@@ -2,18 +2,22 @@ import { useState, useEffect } from "react";
 import { MapPin, Clock } from "lucide-react";
 
 const FoundIt = () => {
-  const [foundData, setfoundData] = useState([]);
-  const [foundDataLoaded, setfoundDataLoaded] = useState(false);
+  const [foundData, setFoundData] = useState([]);
+  const [foundDataLoaded, setFoundDataLoaded] = useState(false);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [jumpPage, setJumpPage] = useState("");
 
-  const fetchfoundData = async () => {
+  const fetchFoundData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/foundItems?search=${encodeURIComponent(search)}`,
+        `http://localhost:3000/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
       );
       const json = await res.json();
-      setfoundData(json);
-      setfoundDataLoaded(true);
+      setFoundData(json.items);
+      setTotalPages(json.totalPages);
+      setFoundDataLoaded(true);
     } catch (error) {
       console.error(error);
     }
@@ -21,10 +25,10 @@ const FoundIt = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      fetchfoundData();
+      fetchFoundData();
     }, 300);
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, page]);
 
   if (!foundDataLoaded)
     return (
@@ -44,11 +48,17 @@ const FoundIt = () => {
           <p className="mt-2 text-xs md:text-sm text-zinc-500">
             Recently reported found items
           </p>
-          <form className="flex items-center gap-2 rounded-lg border w-1/2 mt-2">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex items-center gap-2 rounded-lg border w-1/2 mt-2"
+          >
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               placeholder="Search items..."
               className="w-full px-3 py-2 outline-none"
             />
@@ -84,7 +94,7 @@ const FoundIt = () => {
                       {item.name}
                     </h2>
                     <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 md:px-2.5 md:py-1 text-[0.6rem] md:text-xs font-medium text-zinc-600">
-                      FOUNDED
+                      FOUND
                     </span>
                   </div>
 
@@ -117,6 +127,53 @@ const FoundIt = () => {
             ))}
           </div>
         )}
+      </div>
+      <div className="mt-10 flex items-center justify-center gap-4">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((p) => p - 1)}
+          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          ← Previous
+        </button>
+
+        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+          Page <span className="font-semibold">{page}</span> of{" "}
+          <span className="font-semibold">{totalPages}</span>
+        </div>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage((p) => p + 1)}
+          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Next →
+        </button>
+        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+          Jump to
+          <input
+            type="number"
+            placeholder="1"
+            value={jumpPage}
+            onChange={(e) => setJumpPage(e.target.value)}
+            min={1}
+            max={totalPages}
+            className="px-2 w-20 outline-none"
+          />
+          <button
+            onClick={() => {
+              const pageNum = Number(jumpPage);
+
+              if (pageNum >= 1 && pageNum <= totalPages) {
+                setPage(pageNum);
+              }
+
+              setJumpPage("");
+            }}
+          >
+            Go
+          </button>
+        </div>
       </div>
     </div>
   );

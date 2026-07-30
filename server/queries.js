@@ -152,19 +152,39 @@ const deleteLostItem = async (req, res) => {
 
 // Found Items
 const getFoundItems = async (req, res) => {
-  const { search } = req.query;
+  const { page = 1, search } = req.query;
+  const limit = 20;
+  const offset = (page - 1) * limit;
   try {
     if (search) {
-      const results = await pool.query(
-        `SELECT * FROM founditems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT 20 OFFSET 0`,
+      const countResult = await pool.query(
+        `SELECT COUNT(*) FROM founditems WHERE name ILIKE $1 OR description ILIKE $1`,
         [`%${search}%`],
       );
-      return res.status(200).json(results.rows);
+      const totalItems = Number(countResult.rows[0].count);
+      const results = await pool.query(
+        `SELECT * FROM founditems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+        [`%${search}%`, limit, offset],
+      );
+      return res.status(200).json({
+        items: results.rows,
+        totalItems,
+        currentPage: Number(page),
+        totalPages: Math.ceil(totalItems / limit),
+      });
     }
+    const countResult = await pool.query(`SELECT COUNT(*) FROM founditems`);
+    const totalItems = Number(countResult.rows[0].count);
     const results = await pool.query(
-      "SELECT * FROM founditems ORDER BY created_at DESC LIMIT 20 OFFSET 0",
+      "SELECT * FROM founditems ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+      [limit, offset],
     );
-    res.status(200).json(results.rows);
+    res.status(200).json({
+      items: results.rows,
+      totalItems,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalItems / limit),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
