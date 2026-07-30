@@ -157,6 +157,15 @@ const LostIt = () => {
             placeholder="1"
             value={jumpPage}
             onChange={(e) => setJumpPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const pageNum = Number(jumpPage);
+                if (pageNum >= 1 && pageNum <= totalPages) {
+                  setPage(pageNum);
+                }
+                setJumpPage("");
+              }
+            }}
             min={1}
             max={totalPages}
             className="px-2 w-20 outline-none"
