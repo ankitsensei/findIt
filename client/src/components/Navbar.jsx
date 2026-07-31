@@ -22,6 +22,20 @@ const Navbar = () => {
         <NavLink to="/foundit" className={linkClass}>
           Found It
         </NavLink>
+        <div className="flex gap-1 px-1 py-1 rounded-full bg-white text-sm">
+          <NavLink
+            to="/signin"
+            className={`${linkClass} px-2 bg-zinc-200 rounded-2xl`}
+          >
+            Login
+          </NavLink>
+          <NavLink
+            to="/signup"
+            className={`${linkClass} px-2 bg-zinc-200 rounded-2xl`}
+          >
+            Singup
+          </NavLink>
+        </div>
       </div>
     </nav>
   );
