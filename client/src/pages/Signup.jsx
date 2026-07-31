@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
-import logo from "../assets/logo.jpeg";
+import Logo from "../assets/logo.jpeg";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +36,7 @@ const Signup = () => {
         <div className="mb-8 text-center">
           <NavLink to="/" className="inline-flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl">
-              <img src={logo} alt="logo" className="rounded-md" />
+              <img src={Logo} alt="logo" className="rounded-md" />
             </span>
             <span className="text-xl font-bold tracking-tight text-zinc-900">
               findIt
