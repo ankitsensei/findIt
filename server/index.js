@@ -1,5 +1,5 @@
 import express from "express";
-import * as db from "./queries.js";
+import * as db from "./ItemsQueries.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
 
