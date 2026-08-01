@@ -52,5 +52,15 @@ const updateUser = async (req, res) => {
 };
 
 // Delete users
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
+    res.status(200).send(`User deleted with id: ${id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-export { getUsers, createUser, updateUser };
+export { getUsers, createUser, updateUser, deleteUser };

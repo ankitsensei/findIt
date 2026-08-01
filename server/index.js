@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 app.get("/users", usersDb.getUsers);
 app.post("/createuser", usersDb.createUser);
 app.put("/updateuser/:id", usersDb.updateUser);
+app.delete("/deleteuser/:id", usersDb.deleteUser);
 
 // Items routing
 app.get("/lostItems", itemsDb.getLostItems);
