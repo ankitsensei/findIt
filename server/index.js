@@ -1,5 +1,5 @@
 import express from "express";
-import * as db from "./ItemsQueries.js";
+import * as itemsDb from "./ItemsQueries.js";
 import * as usersDb from "./UsersQueries.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
@@ -19,18 +19,18 @@ app.get("/", (req, res) => {
 app.get("/users", usersDb.getUsers);
 
 // Items routing
-app.get("/lostItems", db.getLostItems);
-app.get("/lostItems/:id", db.getLostItemById);
-app.post("/lostItems", upload.single("image"), db.createLostItem);
-app.put("/lostItems/:id", db.updateLostItem);
-app.patch("/lostItems/:id", db.softDeleteLostItem);
-app.delete("/lostItems/:id", db.deleteLostItem);
-app.get("/foundItems", db.getFoundItems);
-app.get("/foundItems/:id", db.getFoundItemById);
-app.post("/foundItems", upload.single("image"), db.createFoundItem);
-app.put("/foundItems/:id", db.updateFoundItem);
-app.patch("/foundItems/:id", db.softDeleteFoundItem);
-app.delete("/foundItems/:id", db.deleteFoundItem);
+app.get("/lostItems", itemsDb.getLostItems);
+app.get("/lostItems/:id", itemsDb.getLostItemById);
+app.post("/lostItems", upload.single("image"), itemsDb.createLostItem);
+app.put("/lostItems/:id", itemsDb.updateLostItem);
+app.patch("/lostItems/:id", itemsDb.softDeleteLostItem);
+app.delete("/lostItems/:id", itemsDb.deleteLostItem);
+app.get("/foundItems", itemsDb.getFoundItems);
+app.get("/foundItems/:id", itemsDb.getFoundItemById);
+app.post("/foundItems", upload.single("image"), itemsDb.createFoundItem);
+app.put("/foundItems/:id", itemsDb.updateFoundItem);
+app.patch("/foundItems/:id", itemsDb.softDeleteFoundItem);
+app.delete("/foundItems/:id", itemsDb.deleteFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
