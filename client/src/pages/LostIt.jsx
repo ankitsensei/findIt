@@ -25,7 +25,7 @@ const LostIt = () => {
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {  
       fetchLostData();
     }, 300);
     return () => clearTimeout(timeout);

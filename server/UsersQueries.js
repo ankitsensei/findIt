@@ -32,7 +32,25 @@ const createUser = async (req, res) => {
 };
 
 // Update users
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const { username, email, password } = req.body;
+  try {
+    const results = await pool.query(
+      `UPDATE users SET username=$1, email=$2, password=$3 WHERE id=$4 RETURNING *`,
+      [username, email, password, id],
+    );
+    if (results.rowCount === 0) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    res.status(200).json(`Item modified with ID: ${id}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error });
+  }
+};
 
 // Delete users
 
-export { getUsers, createUser };
+export { getUsers, createUser, updateUser };

@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 // Users routing
 app.get("/users", usersDb.getUsers);
 app.post("/createuser", usersDb.createUser);
+app.put("/updateuser/:id", usersDb.updateUser);
 
 // Items routing
 app.get("/lostItems", itemsDb.getLostItems);
