@@ -1,5 +1,6 @@
 import express from "express";
 import * as db from "./ItemsQueries.js";
+import * as usersDb from "./UsersQueries.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
 
@@ -14,6 +15,10 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// Users routing
+app.get("/users", usersDb.getUsers);
+
+// Items routing
 app.get("/lostItems", db.getLostItems);
 app.get("/lostItems/:id", db.getLostItemById);
 app.post("/lostItems", upload.single("image"), db.createLostItem);
