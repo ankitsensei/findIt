@@ -111,6 +111,65 @@ const Home = () => {
             />
           </div>
         </section>
+        <section className="mt-20 md:mt-28">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900">
+              Why findIt?
+            </h2>
+            <p className="mt-2 text-sm md:text-base text-zinc-500">
+              Everything you need to reunite lost items with their owners.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map(({ icon: Icon, title, description }) => (
+              <div
+                key={title}
+                className="group rounded-2xl border border-zinc-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg md:p-7"
+              >
+                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-100 text-zinc-900 transition group-hover:bg-zinc-950 group-hover:text-white">
+                  <Icon size={20} strokeWidth={1.8} />
+                </div>
+                <h3 className="text-base md:text-lg font-medium text-zinc-900">
+                  {title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-500">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-20 md:mt-28">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900">
+              How it works
+            </h2>
+            <p className="mt-2 text-sm md:text-base text-zinc-500">
+              From report to reunion in three simple steps.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:gap-6 sm:grid-cols-3">
+            {steps.map(({ step, title, description }) => (
+              <div
+                key={step}
+                className="relative flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 md:p-7"
+              >
+                <span className="text-sm font-semibold text-zinc-300">
+                  {step}
+                </span>
+                <h3 className="mt-3 text-base md:text-lg font-medium text-zinc-900">
+                  {title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-500">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
