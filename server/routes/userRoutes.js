@@ -1,4 +1,5 @@
 import "dotenv/config";
+import bcrypt from "bcrypt";
 import pg from "pg";
 const { Pool } = pg;
 const pool = new Pool({
@@ -20,9 +21,10 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const results = await pool.query(
       `INSERT INTO users (username, email, password) VALUES($1, $2, $3) RETURNING *`,
-      [username, email, password],
+      [username, email, hashedPassword],
     );
     res.status(201).json(results.rows[0]);
   } catch (error) {
