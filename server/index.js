@@ -2,6 +2,7 @@ import express from "express";
 import * as lostItemRoutes from "./routes/lostItemRoutes.js";
 import * as foundItemRoutes from "./routes/foundItemRoutes.js";
 import * as userRoutes from "./routes/userRoutes.js";
+import auth from "./middleware/auth.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
 
@@ -16,12 +17,15 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.post("/login", userRoutes.login);
+
 // Users routing
-app.get("/users", userRoutes.getUsers);
-app.get("/user/:id", userRoutes.getUser);
+// app.get("/users", userRoutes.getUsers);
+app.get("/users", auth, userRoutes.getUsers);
+app.get("/user/:id", auth, userRoutes.getUser);
 app.post("/createuser", userRoutes.createUser);
-app.put("/updateuser/:id", userRoutes.updateUser);
-app.delete("/deleteuser/:id", userRoutes.deleteUser);
+app.put("/updateuser/:id", auth, userRoutes.updateUser);
+app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
 app.get("/lostItems", lostItemRoutes.getLostItems);
