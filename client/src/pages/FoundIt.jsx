@@ -132,62 +132,66 @@ const FoundIt = () => {
           </div>
         )}
       </div>
-      <div className="mt-10 flex items-center justify-center gap-4">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          ← Previous
-        </button>
+      {foundData.length ? (
+        <div className="mt-10 flex items-center justify-center gap-4">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            ← Previous
+          </button>
 
-        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
-          Page <span className="font-semibold">{page}</span> of{" "}
-          <span className="font-semibold">{totalPages}</span>
-        </div>
+          <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+            Page <span className="font-semibold">{page}</span> of{" "}
+            <span className="font-semibold">{totalPages}</span>
+          </div>
 
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => p + 1)}
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Next →
-        </button>
-        <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
-          Jump to
-          <input
-            type="number"
-            placeholder="1"
-            value={jumpPage}
-            onChange={(e) => setJumpPage(e.target.value)}
-            min={1}
-            max={totalPages}
-            className="px-2 w-20 outline-none"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Next →
+          </button>
+          <div className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm">
+            Jump to
+            <input
+              type="number"
+              placeholder="1"
+              value={jumpPage}
+              onChange={(e) => setJumpPage(e.target.value)}
+              min={1}
+              max={totalPages}
+              className="px-2 w-20 outline-none"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const pageNum = Number(jumpPage);
+                  if (pageNum >= 1 && pageNum <= totalPages) {
+                    setPage(pageNum);
+                  }
+                  setJumpPage("");
+                }
+              }}
+            />
+            <button
+              onClick={() => {
                 const pageNum = Number(jumpPage);
+
                 if (pageNum >= 1 && pageNum <= totalPages) {
                   setPage(pageNum);
                 }
+
                 setJumpPage("");
-              }
-            }}
-          />
-          <button
-            onClick={() => {
-              const pageNum = Number(jumpPage);
-
-              if (pageNum >= 1 && pageNum <= totalPages) {
-                setPage(pageNum);
-              }
-
-              setJumpPage("");
-            }}
-          >
-            Go
-          </button>
+              }}
+            >
+              Go
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 };
