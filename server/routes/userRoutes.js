@@ -6,11 +6,29 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-// Users
+// Get Users
 const getUsers = async (req, res) => {
   try {
     const results = await pool.query(`SELECT * FROM users`);
     return res.status(200).json(results.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Get a user
+const getUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const results = await pool.query(
+      `SELECT id, username, email FROM users WHERE id=$1`,
+      [userId],
+    );
+    if (results.rowCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json(results.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -65,4 +83,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { getUsers, createUser, updateUser, deleteUser };
+export { getUsers, getUser, createUser, updateUser, deleteUser };

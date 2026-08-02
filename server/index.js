@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 
 // Users routing
 app.get("/users", userRoutes.getUsers);
+app.get("/user/:id", userRoutes.getUser);
 app.post("/createuser", userRoutes.createUser);
 app.put("/updateuser/:id", userRoutes.updateUser);
 app.delete("/deleteuser/:id", userRoutes.deleteUser);
