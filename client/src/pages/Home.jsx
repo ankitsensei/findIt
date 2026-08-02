@@ -170,6 +170,31 @@ const Home = () => {
             ))}
           </div>
         </section>
+
+        <section className="mt-20 md:mt-28 overflow-hidden rounded-3xl bg-zinc-950 px-6 py-12 md:px-12 md:py-16">
+          <div className="flex flex-col items-center gap-8 text-center">
+            <h2 className="max-w-xl text-2xl md:text-3xl font-semibold tracking-tight text-white">
+              Every item deserves a way home.
+            </h2>
+            <p className="max-w-md text-sm md:text-base text-zinc-400">
+              Start looking or help someone else find what they've lost today.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <NavLink
+                to="/lostit"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-200 active:scale-[0.98]"
+              >
+                Browse lost items
+              </NavLink>
+              <NavLink
+                to="/foundit"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.98]"
+              >
+                Browse found items
+              </NavLink>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
