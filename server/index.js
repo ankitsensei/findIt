@@ -1,6 +1,7 @@
 import express from "express";
-import * as itemsDb from "./ItemsQueries.js";
-import * as usersDb from "./UsersQueries.js";
+import * as lostItemRoutes from "./routes/lostItemRoutes.js";
+import * as foundItemRoutes from "./routes/foundItemRoutes.js";
+import * as userRoutes from "./routes/userRoutes.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
 
@@ -16,24 +17,30 @@ app.get("/", (req, res) => {
 });
 
 // Users routing
-app.get("/users", usersDb.getUsers);
-app.post("/createuser", usersDb.createUser);
-app.put("/updateuser/:id", usersDb.updateUser);
-app.delete("/deleteuser/:id", usersDb.deleteUser);
+app.get("/users", userRoutes.getUsers);
+app.post("/createuser", userRoutes.createUser);
+app.put("/updateuser/:id", userRoutes.updateUser);
+app.delete("/deleteuser/:id", userRoutes.deleteUser);
 
-// Items routing
-app.get("/lostItems", itemsDb.getLostItems);
-app.get("/lostItems/:id", itemsDb.getLostItemById);
-app.post("/lostItems", upload.single("image"), itemsDb.createLostItem);
-app.put("/lostItems/:id", itemsDb.updateLostItem);
-app.patch("/lostItems/:id", itemsDb.softDeleteLostItem);
-app.delete("/lostItems/:id", itemsDb.deleteLostItem);
-app.get("/foundItems", itemsDb.getFoundItems);
-app.get("/foundItems/:id", itemsDb.getFoundItemById);
-app.post("/foundItems", upload.single("image"), itemsDb.createFoundItem);
-app.put("/foundItems/:id", itemsDb.updateFoundItem);
-app.patch("/foundItems/:id", itemsDb.softDeleteFoundItem);
-app.delete("/foundItems/:id", itemsDb.deleteFoundItem);
+// Lost Items routing
+app.get("/lostItems", lostItemRoutes.getLostItems);
+app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
+app.post("/lostItems", upload.single("image"), lostItemRoutes.createLostItem);
+app.put("/lostItems/:id", lostItemRoutes.updateLostItem);
+app.patch("/lostItems/:id", lostItemRoutes.softDeleteLostItem);
+app.delete("/lostItems/:id", lostItemRoutes.deleteLostItem);
+
+// Found Items routing
+app.get("/foundItems", foundItemRoutes.getFoundItems);
+app.get("/foundItems/:id", foundItemRoutes.getFoundItemById);
+app.post(
+  "/foundItems",
+  upload.single("image"),
+  foundItemRoutes.createFoundItem,
+);
+app.put("/foundItems/:id", foundItemRoutes.updateFoundItem);
+app.patch("/foundItems/:id", foundItemRoutes.softDeleteFoundItem);
+app.delete("/foundItems/:id", foundItemRoutes.deleteFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
