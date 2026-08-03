@@ -1,14 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import Logo from "../assets/logo.jpeg";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [credentialError, setCredentialError] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -28,12 +28,12 @@ const Signin = () => {
       console.log(response.data);
       // Save JWT
       localStorage.setItem("token", response.data.token);
-      setCredentialError(false);
-      setSubmitted(true);
+      toast.success("Login Successful!");
+      setTimeout(() => {
+        navigate("/");
+      });
     } catch (error) {
-      setCredentialError(true);
-      setSubmitted(false);
-      console.error(error);
+      toast.error(error.response?.data?.message || "Invalid email or password");
     }
   };
 
@@ -46,6 +46,7 @@ const Signin = () => {
 
   return (
     <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-zinc-50 px-4 py-12">
+      <Toaster />
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <NavLink to="/" className="inline-flex items-center gap-2.5">
@@ -63,16 +64,6 @@ const Signin = () => {
             Sign in to your account to continue.
           </p>
         </div>
-        {submitted && (
-          <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-            Signed in successfully!
-          </div>
-        )}
-        {credentialError && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            Wrong credentials
-          </div>
-        )}
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="flex flex-col gap-4">
