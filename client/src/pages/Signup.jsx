@@ -17,13 +17,18 @@ const Signup = () => {
     formState: { errors },
   } = useForm({
     mode: "onTouched",
-    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post("http://localhost:3000/createuser", {
-        username: data.name,
+        username: data.username,
         email: data.email,
         password: data.password,
       });
@@ -75,7 +80,7 @@ const Signup = () => {
                   htmlFor="name"
                   className="mb-1.5 block text-sm font-medium text-zinc-700"
                 >
-                  Full name
+                  Username
                 </label>
                 <div className="relative">
                   <User
@@ -84,22 +89,31 @@ const Signup = () => {
                     className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
                   />
                   <input
-                    id="name"
+                    id="username"
                     type="text"
-                    placeholder="John Doe"
-                    className={inputClass(errors.name)}
-                    {...register("name", {
-                      required: "Name is required",
+                    placeholder="johndoe"
+                    className={inputClass(errors.username)}
+                    {...register("username", {
+                      required: "Username is required",
                       minLength: {
-                        value: 2,
-                        message: "Name must be at least 2 characters",
+                        value: 5,
+                        message: "Username must be at least 5 characters",
+                      },
+                      maxLength: {
+                        value: 30,
+                        message: "Username cannot exceed 30 characters",
+                      },
+                      pattern: {
+                        value: /^[a-zA-Z0-9._]+$/,
+                        message:
+                          "Only letters, numbers, periods (.) and underscores (_) are allowed",
                       },
                     })}
                   />
                 </div>
-                {errors.name && (
+                {errors.username && (
                   <p className="mt-1.5 text-xs text-red-600">
-                    {errors.name.message}
+                    {errors.username.message}
                   </p>
                 )}
               </div>
