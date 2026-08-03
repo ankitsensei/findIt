@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@keyframes nav-icon-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.nav-icon {
+  animation: nav-icon-pop 0.2s ease-out;
+}
