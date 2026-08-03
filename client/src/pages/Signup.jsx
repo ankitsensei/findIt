@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -19,8 +20,18 @@ const Signup = () => {
     defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   });
 
-  const onSubmit = () => {
-    setSubmitted(true);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:3000/createuser", {
+        username: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      console.log(response.data);
+      setSubmitted(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const inputClass = (hasError) =>
