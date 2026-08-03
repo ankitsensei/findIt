@@ -28,12 +28,11 @@ const Signin = () => {
       console.log(response.data);
       // Save JWT
       localStorage.setItem("token", response.data.token);
-      if (!response.data) {
-        setCredentialError(true);
-      } else {
-        setSubmitted(true);
-      }
+      setCredentialError(false);
+      setSubmitted(true);
     } catch (error) {
+      setCredentialError(true);
+      setSubmitted(false);
       console.error(error);
     }
   };
