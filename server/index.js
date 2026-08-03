@@ -20,9 +20,8 @@ app.get("/", (req, res) => {
 app.post("/login", userRoutes.login);
 
 // Users routing
-// app.get("/users", userRoutes.getUsers);
-app.get("/users", auth, userRoutes.getUsers);
-app.get("/user/:id", auth, userRoutes.getUser);
+app.get("/users", userRoutes.getUsers);
+app.get("/me", auth, userRoutes.getUser);
 app.post("/createuser", userRoutes.createUser);
 app.put("/updateuser/:id", auth, userRoutes.updateUser);
 app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);

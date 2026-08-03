@@ -54,7 +54,7 @@ const getUsers = async (req, res) => {
 
 // Get a user
 const getUser = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
   try {
     const results = await pool.query(
       `SELECT id, username, email FROM users WHERE id=$1`,
