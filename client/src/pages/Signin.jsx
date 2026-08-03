@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import Logo from "../assets/logo.jpeg";
@@ -7,6 +8,7 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [credentialError, setCredentialError] = useState(false);
 
   const {
     register,
@@ -17,8 +19,23 @@ const Signin = () => {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = () => {
-    setSubmitted(true);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:3000/login", {
+        email: data.email,
+        password: data.password,
+      });
+      console.log(response.data);
+      // Save JWT
+      localStorage.setItem("token", response.data.token);
+      if (!response.data) {
+        setCredentialError(true);
+      } else {
+        setSubmitted(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const inputClass = (hasError) =>
@@ -47,13 +64,16 @@ const Signin = () => {
             Sign in to your account to continue.
           </p>
         </div>
-
         {submitted && (
           <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
             Signed in successfully!
           </div>
         )}
-
+        {credentialError && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            Wrong credentials
+          </div>
+        )}
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="flex flex-col gap-4">
@@ -152,7 +172,6 @@ const Signin = () => {
             </div>
           </form>
         </div>
-
         <p className="mt-6 text-center text-sm text-zinc-500">
           Don't have an account?{" "}
           <NavLink
