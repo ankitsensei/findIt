@@ -132,7 +132,7 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
             <div className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-5">
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-900 text-white">
                 <Package size={16} strokeWidth={1.8} />
@@ -174,10 +174,10 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 md:gap-4">
             <NavLink
               to="/lostit"
-              className="group flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
+              className="group flex flex-col md:flex-row items-start md:items-center gap-4 rounded-2xl border border-blue-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-white transition group-hover:bg-zinc-800">
                 <Package size={20} strokeWidth={1.8} />
@@ -194,7 +194,7 @@ const Profile = () => {
 
             <NavLink
               to="/foundit"
-              className="group flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
+              className="group flex flex-col md:flex-row items-start md:items-center gap-4 rounded-2xl border border-blue-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-900 transition group-hover:bg-zinc-900 group-hover:text-white">
                 <Search size={20} strokeWidth={1.8} />
