@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.post("/login", userRoutes.login);
 
 // Users routing
-app.get("/users", userRoutes.getUsers); 
+app.get("/users", userRoutes.getUsers);
 app.get("/me", auth, userRoutes.getUser);
 app.post("/createuser", userRoutes.createUser);
 app.put("/updateuser/:id", auth, userRoutes.updateUser);

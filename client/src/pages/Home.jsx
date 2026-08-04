@@ -57,8 +57,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-6xl">
-        <section className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="flex flex-col items-start gap-6">
+        <section className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 w-full">
+          <div className="flex flex-col items-center lg:items-start gap-6 text-center lg:text-left">
             <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-600 shadow-sm">
               <ShieldCheck size={14} className="text-zinc-900" />
               Trusted by your local community
@@ -69,7 +69,7 @@ const Home = () => {
               <span className="text-zinc-400">Found something?</span>
             </h1>
 
-            <p className="text-base md:text-lg leading-7 text-zinc-500">
+            <p className="text-base md:text-lg leading-7 text-zinc-500 max-w-lg">
               Help reconnect lost items with their owners. Report what you lost
               or what you found — we'll match them and bring them home.
             </p>
@@ -102,12 +102,12 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative flex justify-center lg:justify-end">
             <div className="absolute -inset-4 rounded-3xl bg-zinc-200/60 blur-2xl" />
             <img
               src={hero}
               alt="Lost and found illustration"
-              className="relative w-full rounded-3xl border border-zinc-200 object-cover shadow-xl"
+              className="relative w-full max-w-md lg:max-w-none rounded-3xl border border-zinc-200 object-cover shadow-xl"
             />
           </div>
         </section>
