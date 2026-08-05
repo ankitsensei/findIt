@@ -28,7 +28,7 @@ app.put("/updateuser/:id", auth, userRoutes.updateUser);
 app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
-app.get("/lostItems", auth, lostItemRoutes.getLostItems);
+app.get("/lostItems", lostItemRoutes.getLostItems);
 app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
 app.post(
   "/lostItems",
@@ -41,8 +41,8 @@ app.patch("/lostItems/:id", auth, lostItemRoutes.softDeleteLostItem);
 app.delete("/lostItems/:id", auth, lostItemRoutes.deleteLostItem);
 
 // Found Items routing
-app.get("/foundItems", auth, foundItemRoutes.getFoundItems);
-app.get("/foundItems/:id", auth, foundItemRoutes.getFoundItemById);
+app.get("/foundItems", foundItemRoutes.getFoundItems);
+app.get("/foundItems/:id", foundItemRoutes.getFoundItemById);
 app.post(
   "/foundItems",
   auth,
