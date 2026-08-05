@@ -10,10 +10,10 @@ const ViewDetails = () => {
 
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchItem = async () => {
-      const token = localStorage.getItem("token");
       try {
         const res = await fetch(`http://localhost:3000/${type}Items/${id}`, {
           method: "GET",

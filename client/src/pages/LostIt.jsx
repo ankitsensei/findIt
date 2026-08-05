@@ -9,9 +9,9 @@ const LostIt = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jumpPage, setJumpPage] = useState("");
+  const token = localStorage.getItem("token");
 
   const fetchLostData = async () => {
-    const token = localStorage.getItem("token");
     try {
       const res = await fetch(
         `http://localhost:3000/lostItems?page=${page}&search=${search}`,
