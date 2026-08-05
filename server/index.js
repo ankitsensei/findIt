@@ -27,9 +27,14 @@ app.put("/updateuser/:id", auth, userRoutes.updateUser);
 app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
-app.get("/lostItems", lostItemRoutes.getLostItems);
+app.get("/lostItems", auth, lostItemRoutes.getLostItems);
 app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
-app.post("/lostItems", upload.single("image"), lostItemRoutes.createLostItem);
+app.post(
+  "/lostItems",
+  auth,
+  upload.single("image"),
+  lostItemRoutes.createLostItem,
+);
 app.put("/lostItems/:id", lostItemRoutes.updateLostItem);
 app.patch("/lostItems/:id", lostItemRoutes.softDeleteLostItem);
 app.delete("/lostItems/:id", lostItemRoutes.deleteLostItem);

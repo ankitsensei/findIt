@@ -97,8 +97,15 @@ const createLostItem = async (req, res) => {
     const image = await uploadImage(req.file.buffer, "findit/lost-items");
 
     const results = await pool.query(
-      "INSERT INTO lostitems (name, description, image_url, image_public_id, location) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, description, image.secure_url, image.public_id, location],
+      "INSERT INTO lostitems (name, description, image_url, image_public_id, location, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [
+        name,
+        description,
+        image.secure_url,
+        image.public_id,
+        location,
+        req.user.id,
+      ],
     );
     res.status(201).json(results.rows[0]);
   } catch (error) {
