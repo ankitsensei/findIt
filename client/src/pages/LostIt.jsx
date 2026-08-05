@@ -11,9 +11,17 @@ const LostIt = () => {
   const [jumpPage, setJumpPage] = useState("");
 
   const fetchLostData = async () => {
+    const token = localStorage.getItem("token");
     try {
       const res = await fetch(
         `http://localhost:3000/lostItems?page=${page}&search=${search}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       const json = await res.json();
       setLostData(json.items);

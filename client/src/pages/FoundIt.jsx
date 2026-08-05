@@ -16,11 +16,15 @@ const FoundIt = () => {
         `http://localhost:3000/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
       );
       const json = await res.json();
-      setFoundData(json.items);
-      setTotalPages(json.totalPages);
+      if (!res.ok) throw new Error(json.message || "Failed to load items");
+      setFoundData(json.items ?? []);
+      setTotalPages(json.totalPages ?? 0);
       setFoundDataLoaded(true);
     } catch (error) {
       console.error(error);
+      setFoundData([]);
+      setTotalPages(0);
+      setFoundDataLoaded(true);
     }
   };
 
