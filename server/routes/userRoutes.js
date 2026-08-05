@@ -91,12 +91,36 @@ const updateUser = async (req, res) => {
   const { id } = req.params;
   const { username, email, password } = req.body;
   try {
-    const hashedPassword = password
-      ? await bcrypt.hash(password, 10)
-      : undefined;
+    const updates = [];
+    const values = [];
+
+    if (username !== undefined && username !== null) {
+      if (username.trim().length < 5 || username.trim().length > 30) {
+        return res
+          .status(400)
+          .json({ message: "Username must be 5-30 characters" });
+      }
+      updates.push(`username=$${values.length + 1}`);
+      values.push(username.trim());
+    }
+    if (email !== undefined && email !== null) {
+      updates.push(`email=$${values.length + 1}`);
+      values.push(email);
+    }
+    if (password !== undefined && password !== null) {
+      updates.push(`password=$${values.length + 1}`);
+      values.push(await bcrypt.hash(password, 10));
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ message: "Nothing to update" });
+    }
+
+    values.push(id);
     const results = await pool.query(
-      `UPDATE users SET username=$1, email=$2, password=$3 WHERE id=$4 RETURNING id, username, email, created_at`,
-      [username, email, hashedPassword, id],
+      `UPDATE users SET ${updates.join(", ")} WHERE id=$${values.length}
+       RETURNING id, username, email, created_at`,
+      values,
     );
     if (results.rowCount === 0) {
       return res.status(400).json({ message: "User not found" });
@@ -104,7 +128,7 @@ const updateUser = async (req, res) => {
     res.status(200).json(results.rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
