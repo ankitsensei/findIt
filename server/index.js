@@ -29,7 +29,7 @@ app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
 app.get("/lostItems", auth, lostItemRoutes.getLostItems);
-app.get("/lostItems/:id", auth, lostItemRoutes.getLostItemById);
+app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
 app.post(
   "/lostItems",
   auth,
