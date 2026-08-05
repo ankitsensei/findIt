@@ -97,15 +97,39 @@ const Profile = () => {
     setUsernameError(validateUsername(value));
   };
 
-  const handleSaveUsername = () => {
+  const handleSaveUsername = async () => {
     const error = validateUsername(usernameDraft);
     if (error) {
       setUsernameError(error);
       return;
     }
-    setUserData((prev) => ({ ...prev, username: usernameDraft.trim() }));
-    setOpenEditWindow(false);
-    toast.success("Username updated successfully");
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/updateuser/${userData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ username: usernameDraft.trim() }),
+        },
+      );
+      const updatedUser = await response.json();
+      if (!response.ok) {
+        toast.error(updatedUser.message);
+        return;
+      }
+      setUserData(updatedUser);
+      setOpenEditWindow(false);
+      toast.success("Username updated successfully");
+    } catch (error) {
+      console.error(error);
+    }
+    // setUserData((prev) => ({ ...prev, username: usernameDraft.trim() }));
+    // setOpenEditWindow(false);
+    // toast.success("Username updated successfully");
   };
 
   const getInitials = (name) => {
