@@ -13,10 +13,15 @@ const ViewDetails = () => {
 
   useEffect(() => {
     const fetchItem = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const res = await fetch(
-          `http://localhost:3000/${type}Items/${id}`,
-        );
+        const res = await fetch(`http://localhost:3000/${type}Items/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const json = await res.json();
         setItem(json[0]);
       } catch (error) {
