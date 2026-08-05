@@ -9,6 +9,7 @@ const ViewDetails = () => {
   const type = path.startsWith("/lostit") ? "lost" : "found";
 
   const [item, setItem] = useState(null);
+  const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
@@ -34,12 +35,18 @@ const ViewDetails = () => {
   }, [id, type]);
 
   useEffect(() => {
-    try {
-      // const userRes = await fetch(`http://localhost:3000/me`)
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    if (!item) return;
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/users/${item.user_id}`);
+        const json = await res.json();
+        setUser(json);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, [item]);
 
   if (loading) {
     return (
@@ -115,6 +122,10 @@ const ViewDetails = () => {
                     day: "numeric",
                   })}
                 </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <p>Posted by:</p>
+                <span>{user.username}</span>
               </div>
             </div>
           </div>
