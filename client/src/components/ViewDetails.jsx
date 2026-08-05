@@ -33,6 +33,14 @@ const ViewDetails = () => {
     fetchItem();
   }, [id, type]);
 
+  useEffect(() => {
+    try {
+      // const userRes = await fetch(`http://localhost:3000/me`)
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">

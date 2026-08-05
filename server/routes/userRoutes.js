@@ -53,7 +53,7 @@ const getUsers = async (req, res) => {
 };
 
 // Get a user
-const getUser = async (req, res) => {
+const getMe = async (req, res) => {
   const userId = req.user.id;
   try {
     const results = await pool.query(
@@ -64,6 +64,24 @@ const getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     return res.json(results.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getUser = async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId);
+  try {
+    const result = await pool.query(
+      `SELECT id, username, email FROM users WHERE id=$1`,
+      [userId],
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -144,4 +162,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { login, getUsers, getUser, createUser, updateUser, deleteUser };
+export { login, getUsers, getMe, getUser, createUser, updateUser, deleteUser };
