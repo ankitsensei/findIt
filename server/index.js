@@ -28,28 +28,29 @@ app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
 app.get("/lostItems", auth, lostItemRoutes.getLostItems);
-app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
+app.get("/lostItems/:id", auth, lostItemRoutes.getLostItemById);
 app.post(
   "/lostItems",
   auth,
   upload.single("image"),
   lostItemRoutes.createLostItem,
 );
-app.put("/lostItems/:id", lostItemRoutes.updateLostItem);
-app.patch("/lostItems/:id", lostItemRoutes.softDeleteLostItem);
-app.delete("/lostItems/:id", lostItemRoutes.deleteLostItem);
+app.put("/lostItems/:id", auth, lostItemRoutes.updateLostItem);
+app.patch("/lostItems/:id", auth, lostItemRoutes.softDeleteLostItem);
+app.delete("/lostItems/:id", auth, lostItemRoutes.deleteLostItem);
 
 // Found Items routing
-app.get("/foundItems", foundItemRoutes.getFoundItems);
-app.get("/foundItems/:id", foundItemRoutes.getFoundItemById);
+app.get("/foundItems", auth, foundItemRoutes.getFoundItems);
+app.get("/foundItems/:id", auth, foundItemRoutes.getFoundItemById);
 app.post(
   "/foundItems",
+  auth,
   upload.single("image"),
   foundItemRoutes.createFoundItem,
 );
-app.put("/foundItems/:id", foundItemRoutes.updateFoundItem);
-app.patch("/foundItems/:id", foundItemRoutes.softDeleteFoundItem);
-app.delete("/foundItems/:id", foundItemRoutes.deleteFoundItem);
+app.put("/foundItems/:id", auth, foundItemRoutes.updateFoundItem);
+app.patch("/foundItems/:id", auth, foundItemRoutes.softDeleteFoundItem);
+app.delete("/foundItems/:id", auth, foundItemRoutes.deleteFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
