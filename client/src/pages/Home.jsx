@@ -76,14 +76,14 @@ const Home = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <NavLink
-                to="/lostit"
+                to="/createlostitem"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.98]"
               >
                 I lost something
                 <ArrowRight size={16} />
               </NavLink>
               <NavLink
-                to="/foundit"
+                to="/createfounditem"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 active:scale-[0.98]"
               >
                 I found something
