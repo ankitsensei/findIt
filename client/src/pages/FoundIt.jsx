@@ -51,34 +51,42 @@ const FoundIt = () => {
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 md:mb-12 text-center flex flex-col items-center  ">
+        <div className="mb-8 md:mb-12 text-center flex flex-col items-center">
           <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900">
             Found Items
           </h1>
           <p className="mt-2 text-xs md:text-sm text-zinc-500">
             Recently reported found items
           </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-2 rounded-lg border w-1/2 mt-2"
-          >
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Search items..."
-              className="w-full px-3 py-2 outline-none"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-r-lg h-full bg-amber-200"
+          <div className="flex gap-2 items-center justify-center mt-2">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex items-center gap-2 rounded-lg border w-100"
             >
-              Search
-            </button>
-          </form>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search items..."
+                className="w-full px-3 py-2 outline-none"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-r-lg h-full bg-amber-200"
+              >
+                Search
+              </button>
+            </form>
+            <NavLink
+              to="/createlostitem"
+              className="bg-black text-white px-4 py-2 rounded-md"
+            >
+              Post what you founded
+            </NavLink>
+          </div>
         </div>
 
         {foundData.length === 0 ? (
