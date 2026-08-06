@@ -58,27 +58,35 @@ const LostIt = () => {
           <p className="mt-2 text-xs md:text-sm text-zinc-500">
             Recently reported lost items
           </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex items-center gap-2 rounded-lg border w-1/2 mt-2"
-          >
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              placeholder="Search items..."
-              className="w-full px-3 py-2 outline-none"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-r-lg h-full bg-amber-200"
+          <div className="flex gap-2 items-center justify-center mt-2">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex items-center gap-2 rounded-lg border w-100"
             >
-              Search
-            </button>
-          </form>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search items..."
+                className="w-full px-3 py-2 outline-none"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-r-lg h-full bg-amber-200"
+              >
+                Search
+              </button>
+            </form>
+            <NavLink
+              to="/createlostitem"
+              className="bg-black text-white px-4 py-2 rounded-md"
+            >
+              Post what you lost
+            </NavLink>
+          </div>
         </div>
 
         {lostData.length === 0 ? (

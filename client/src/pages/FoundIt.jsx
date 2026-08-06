@@ -81,10 +81,10 @@ const FoundIt = () => {
               </button>
             </form>
             <NavLink
-              to="/createlostitem"
+              to="/createfounditem"
               className="bg-black text-white px-4 py-2 rounded-md"
             >
-              Post what you founded
+              Post what you found
             </NavLink>
           </div>
         </div>
