@@ -11,6 +11,8 @@ import ViewDetails from "./components/ViewDetails.jsx";
 import Signup from "./pages/Signup.jsx";
 import Signin from "./pages/Signin";
 import Profile from "./pages/Profile.jsx";
+import CreateLostItem from "./pages/CreateLostItem.jsx";
+import CreateFoundItem from "./pages/CreateFoundItem.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -25,6 +27,8 @@ createRoot(document.getElementById("root")).render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/createlostitem" element={<CreateLostItem />} />
+        <Route path="/createfounditem" element={<CreateFoundItem />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

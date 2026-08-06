@@ -351,7 +351,7 @@ const Profile = () => {
 
           <div className="grid grid-cols-2 gap-2 md:gap-4">
             <NavLink
-              to="/lostit"
+              to="/createlostitem"
               className="group flex flex-col md:flex-row items-start md:items-center gap-4 rounded-2xl border border-blue-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-white transition group-hover:bg-zinc-800">
@@ -368,7 +368,7 @@ const Profile = () => {
             </NavLink>
 
             <NavLink
-              to="/foundit"
+              to="/createfounditem"
               className="group flex flex-col md:flex-row items-start md:items-center gap-4 rounded-2xl border border-blue-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-900 transition group-hover:bg-zinc-900 group-hover:text-white">
