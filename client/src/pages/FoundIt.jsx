@@ -9,11 +9,16 @@ const FoundIt = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [jumpPage, setJumpPage] = useState("");
+  const userId = localStorage.getItem("userId");
 
   const fetchFoundData = async () => {
     try {
       const res = await fetch(
         `http://localhost:3000/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
+        {
+          method: "GET",
+          headers: { userId: userId },
+        },
       );
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Failed to load items");

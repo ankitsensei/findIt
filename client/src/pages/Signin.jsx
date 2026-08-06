@@ -28,6 +28,7 @@ const Signin = () => {
       console.log(response.data);
       // Save JWT
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.user.id);
       toast.success("Login Successful!");
       setTimeout(() => {
         navigate("/");
