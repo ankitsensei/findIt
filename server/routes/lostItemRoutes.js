@@ -76,14 +76,15 @@ const getFoundItems = async (req, res) => {
 
   try {
     if (search) {
+      const searchPattern = `%${search}%`;
       const countResult = await pool.query(
         `SELECT COUNT(*) FROM lostitems WHERE (name ILIKE $1 OR description ILIKE $1) AND user_id=$2`,
-        [`%${search}%`, userId],
+        [searchPattern, userId],
       );
       const totalItems = Number(countResult.rows[0].count);
       const results = await pool.query(
-        `SELECT * from lostitems WHERE (name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3) AND user_id`,
-        [`%${search}%`, limit, offset],
+        `SELECT * FROM lostitems WHERE (name ILIKE $1 OR description ILIKE $1) AND user_id=$2 ORDER BY created_at DESC LIMIT $3 OFFSET $4`,
+        [searchPattern, userId, limit, offset],
       );
       return res.status(200).json({
         items: results.rows,
