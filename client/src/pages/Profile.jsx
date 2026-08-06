@@ -81,6 +81,21 @@ const Profile = () => {
     setUsernameError("");
   };
 
+  useEffect(() => {
+    if (!openEditWindow) return;
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        closeEdit();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [openEditWindow]);
+
   const validateUsername = (value) => {
     const trimmed = value.trim();
     if (!trimmed) return "Username is required";
@@ -283,7 +298,10 @@ const Profile = () => {
 
                 <div className="flex items-center gap-2 text-sm text-zinc-500">
                   <Calendar size={14} strokeWidth={1.8} />
-                  {new Date(userData?.created_at).toLocaleDateString("en-GB")}
+                  <span>Joined to findIt:</span>
+                  <span>
+                    {new Date(userData?.created_at).toLocaleDateString("en-GB")}
+                  </span>
                 </div>
 
                 {userData?.id && (
