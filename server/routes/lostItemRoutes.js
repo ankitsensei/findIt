@@ -72,7 +72,6 @@ const getFoundItems = async (req, res) => {
   const limit = 20;
   const offset = (page - 1) * limit;
   const userId = req.headers.userid;
-  console.log(userId);
 
   try {
     if (search) {
