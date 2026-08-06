@@ -286,7 +286,7 @@ const Profile = () => {
 
                 <div className="flex items-center gap-2 text-sm text-zinc-500">
                   <Calendar size={14} strokeWidth={1.8} />
-                  Member
+                  {new Date(userData?.created_at).toLocaleDateString("en-GB")}
                 </div>
 
                 {userData?.id && (

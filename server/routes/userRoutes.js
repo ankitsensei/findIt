@@ -57,7 +57,7 @@ const getMe = async (req, res) => {
   const userId = req.user.id;
   try {
     const results = await pool.query(
-      `SELECT id, username, email FROM users WHERE id=$1`,
+      `SELECT id, username, email, created_at FROM users WHERE id=$1`,
       [userId],
     );
     if (results.rowCount === 0) {
