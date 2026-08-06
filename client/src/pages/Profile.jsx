@@ -42,8 +42,8 @@ const Profile = () => {
       });
       if (!response.ok) {
         toast.error("Session expired. Please sign in again.");
-        // localStorage.removeItem("token");
-        // navigate("/signin");
+        localStorage.removeItem("token");
+        navigate("/signin");
         return;
       }
       const user = await response.json();
@@ -127,9 +127,6 @@ const Profile = () => {
     } catch (error) {
       console.error(error);
     }
-    // setUserData((prev) => ({ ...prev, username: usernameDraft.trim() }));
-    // setOpenEditWindow(false);
-    // toast.success("Username updated successfully");
   };
 
   const getInitials = (name) => {
