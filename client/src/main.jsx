@@ -8,6 +8,7 @@ import App from "./App.jsx";
 import LostIt from "./pages/LostIt.jsx";
 import FoundIt from "./pages/FoundIt.jsx";
 import MyLosts from "./pages/MyLosts.jsx";
+import MyFounds from "./pages/MyFounds.jsx";
 import ViewDetails from "./components/ViewDetails.jsx";
 import Signup from "./pages/Signup.jsx";
 import Signin from "./pages/Signin";
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/lostit" element={<LostIt />} />
         <Route path="/lostit/:id" element={<ViewDetails />} />
         <Route path="/mylosts" element={<MyLosts />} />
+        <Route path="/myfounds" element={<MyFounds />} />
         <Route path="/foundit" element={<FoundIt />} />
         <Route path="/foundit/:id" element={<ViewDetails />} />
         <Route path="/signup" element={<Signup />} />

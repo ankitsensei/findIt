@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { MapPin, Clock, Search, Plus } from "lucide-react";
 
-const FoundIt = () => {
+const MyFounds = () => {
   const [foundData, setFoundData] = useState([]);
   const [foundDataLoaded, setFoundDataLoaded] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   const fetchFoundData = async () => {
     try {
@@ -18,13 +18,15 @@ const FoundIt = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         },
       );
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Failed to load items");
-      setFoundData(json.items ?? []);
+      const myItems = (json.items ?? []).filter(
+        (item) => String(item.user_id) === String(userId),
+      );
+      setFoundData(myItems);
       setTotalPages(json.totalPages ?? 0);
       setFoundDataLoaded(true);
     } catch (error) {
@@ -60,10 +62,10 @@ const FoundIt = () => {
               Found items
             </div>
             <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900">
-              All found items
+              Items I Found
             </h1>
             <p className="mt-2 text-sm md:text-base text-zinc-500">
-              Browse recently reported found items and help reunite them.
+              Browse the items you found and track them as the community helps.
             </p>
           </div>
 
@@ -105,7 +107,7 @@ const FoundIt = () => {
             <p className="mt-1 text-sm text-zinc-500">
               {search
                 ? "Try a different search or clear your query."
-                : "Be the first to report a found item."}
+                : "You haven't reported any found items yet."}
             </p>
             {!search && (
               <NavLink
@@ -227,4 +229,4 @@ const FoundIt = () => {
   );
 };
 
-export default FoundIt;
+export default MyFounds;
