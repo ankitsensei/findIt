@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { Package, MapPin, Image, Upload } from "lucide-react";
 
 const CreateLostItem = () => {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -21,27 +23,39 @@ const CreateLostItem = () => {
   const handleCreateLostItemSubmit = async (data) => {
     const token = localStorage.getItem("token");
 
+    if (!data.image?.[0]) {
+      console.error("Image file is required.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("location", data.location);
     formData.append("image", data.image[0]);
 
-    const response = await fetch(`http://localhost:3000/lostitems`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+    setSubmitLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3000/lostitems`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error(error.message);
-      return;
+      if (!response.ok) {
+        const error = await response.json();
+        console.error(error.message);
+        return;
+      }
+      reset();
+      console.log(await response.json());
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitLoading(false);
     }
-    reset();
-    console.log(await response.json());
   };
 
   const inputClass = (hasError) =>
@@ -194,12 +208,21 @@ const CreateLostItem = () => {
                 >
                   Cancel
                 </NavLink>
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
-                >
-                  Submit item
-                </button>
+                {submitLoading ? (
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto rounded-xl bg-zinc-600 px-6 py-2.5 text-sm font-semibold text-white transition active:scale-[0.99] cursor-wait"
+                  >
+                    Submitting...
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+                  >
+                    Submit item
+                  </button>
+                )}
               </div>
             </div>
           </form>
