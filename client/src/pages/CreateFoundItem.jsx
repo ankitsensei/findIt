@@ -6,6 +6,7 @@ const CreateFoundItem = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
@@ -16,6 +17,12 @@ const CreateFoundItem = () => {
       image: "",
     },
   });
+
+  const imageFile = watch("image");
+  const imagePreview =
+    imageFile && imageFile.length > 0
+      ? URL.createObjectURL(imageFile[0])
+      : null;
 
   const inputClass = (hasError) =>
     `w-full rounded-xl border py-2.5 pl-11 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:ring-2 ${
@@ -131,26 +138,21 @@ const CreateFoundItem = () => {
               <div>
                 <label
                   htmlFor="image"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
-                >
-                  Image
-                </label>
-                <label
-                  htmlFor="image"
                   className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 transition hover:border-zinc-900"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
-                    <Image size={18} strokeWidth={1.8} />
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
+                    <Image size={18} />
                   </span>
+
                   <span className="text-sm text-zinc-500">
-                    Click to upload a photo of the item
+                    {imagePreview
+                      ? imageFile[0].name
+                      : "Click to upload a photo of the item"}
                   </span>
-                  <Upload
-                    size={16}
-                    strokeWidth={1.8}
-                    className="ml-auto shrink-0 text-zinc-400"
-                  />
+
+                  <Upload className="ml-auto text-zinc-400" size={16} />
                 </label>
+
                 <input
                   id="image"
                   type="file"
@@ -158,6 +160,14 @@ const CreateFoundItem = () => {
                   className="hidden"
                   {...register("image")}
                 />
+
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mt-4 h-64 w-full rounded-xl border object-cover"
+                  />
+                )}
               </div>
 
               <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 pt-5 mt-2">
