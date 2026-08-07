@@ -1,5 +1,6 @@
 import express from "express";
 import * as lostItemRoutes from "./routes/lostItemRoutes.js";
+import * as foundItemRoutes from "./routes/foundItemRoutes.js";
 import * as userRoutes from "./routes/userRoutes.js";
 import auth from "./middleware/auth.js";
 import cors from "cors";
@@ -28,7 +29,6 @@ app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
 app.get("/lostItems", lostItemRoutes.getLostItems);
-app.get("/foundItems", lostItemRoutes.getFoundItems);
 app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
 app.post(
   "/lostItems",
@@ -39,6 +39,19 @@ app.post(
 app.put("/lostItems/:id", auth, lostItemRoutes.updateLostItem);
 app.patch("/lostItems/:id", auth, lostItemRoutes.softDeleteLostItem);
 app.delete("/lostItems/:id", auth, lostItemRoutes.deleteLostItem);
+
+// Found Items routing
+app.get("/foundItems", foundItemRoutes.getFoundItems);
+app.get("/foundItems/:id", foundItemRoutes.getFoundItemById);
+app.post(
+  "/foundItems",
+  auth,
+  upload.single("image"),
+  foundItemRoutes.createFoundItem,
+);
+app.put("/foundItems/:id", auth, foundItemRoutes.updateFoundItem);
+app.patch("/foundItems/:id", auth, foundItemRoutes.softDeleteFoundItem);
+app.delete("/foundItems/:id", auth, foundItemRoutes.deleteFoundItem);
 
 app.listen(PORT, () => {
   console.log("App running on PORT: ", PORT);
