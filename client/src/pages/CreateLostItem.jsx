@@ -6,6 +6,7 @@ const CreateLostItem = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
@@ -39,7 +40,7 @@ const CreateLostItem = () => {
       console.error(error.message);
       return;
     }
-
+    reset();
     console.log(await response.json());
   };
 
