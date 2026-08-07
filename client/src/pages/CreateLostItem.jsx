@@ -17,6 +17,32 @@ const CreateLostItem = () => {
     },
   });
 
+  const handleCreateLostItemSubmit = async (data) => {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("location", data.location);
+    formData.append("image", data.image[0]);
+
+    const response = await fetch(`http://localhost:3000/lostitems`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error(error.message);
+      return;
+    }
+
+    console.log(await response.json());
+  };
+
   const inputClass = (hasError) =>
     `w-full rounded-xl border py-2.5 pl-11 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:ring-2 ${
       hasError
@@ -41,7 +67,7 @@ const CreateLostItem = () => {
         </div>
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8 shadow-sm">
-          <form onSubmit={handleSubmit(() => {})} noValidate>
+          <form onSubmit={handleSubmit(handleCreateLostItemSubmit)} noValidate>
             <div className="flex flex-col gap-5">
               <div>
                 <label
