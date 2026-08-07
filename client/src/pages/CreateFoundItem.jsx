@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { Package, MapPin, Image, Upload } from "lucide-react";
 
 const CreateFoundItem = () => {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm({
@@ -23,6 +26,44 @@ const CreateFoundItem = () => {
     imageFile && imageFile.length > 0
       ? URL.createObjectURL(imageFile[0])
       : null;
+
+  const handleCreateFoundItemSubmit = async (data) => {
+    const token = localStorage.getItem("token");
+
+    if (!data.image?.[0]) {
+      console.error("Image file is required.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("location", data.location);
+    formData.append("image", data.image[0]);
+
+    setSubmitLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3000/foundItems`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error(error.message);
+        return;
+      }
+      reset();
+      console.log(await response.json());
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   const inputClass = (hasError) =>
     `w-full rounded-xl border py-2.5 pl-11 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:ring-2 ${
@@ -48,7 +89,10 @@ const CreateFoundItem = () => {
         </div>
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8 shadow-sm">
-          <form onSubmit={handleSubmit(() => {})} noValidate>
+          <form
+            onSubmit={handleSubmit(handleCreateFoundItemSubmit)}
+            noValidate
+          >
             <div className="flex flex-col gap-5">
               <div>
                 <label
@@ -177,12 +221,21 @@ const CreateFoundItem = () => {
                 >
                   Cancel
                 </NavLink>
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
-                >
-                  Submit item
-                </button>
+                {submitLoading ? (
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto rounded-xl bg-zinc-600 px-6 py-2.5 text-sm font-semibold text-white transition active:scale-[0.99] cursor-wait"
+                  >
+                    Submitting...
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+                  >
+                    Submit item
+                  </button>
+                )}
               </div>
             </div>
           </form>

@@ -9,6 +9,7 @@ const CreateLostItem = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
@@ -19,6 +20,12 @@ const CreateLostItem = () => {
       image: "",
     },
   });
+
+  const imageFile = watch("image");
+  const imagePreview =
+    imageFile && imageFile.length > 0
+      ? URL.createObjectURL(imageFile[0])
+      : null;
 
   const handleCreateLostItemSubmit = async (data) => {
     const token = localStorage.getItem("token");
@@ -184,7 +191,9 @@ const CreateLostItem = () => {
                     <Image size={18} strokeWidth={1.8} />
                   </span>
                   <span className="text-sm text-zinc-500">
-                    Click to upload a photo of the item
+                    {imagePreview
+                      ? imageFile[0].name
+                      : "Click to upload a photo of the item"}
                   </span>
                   <Upload
                     size={16}
@@ -199,6 +208,13 @@ const CreateLostItem = () => {
                   className="hidden"
                   {...register("image")}
                 />
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mt-4 h-64 w-full rounded-xl border object-cover"
+                  />
+                )}
               </div>
 
               <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 pt-5 mt-2">
