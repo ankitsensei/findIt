@@ -56,8 +56,11 @@ const Navbar = () => {
             <NavLink to="/lostit" className={linkClass}>
               Lost Items
             </NavLink>
+            <NavLink to="/mylosts" className={linkClass}>
+              Lost by Me
+            </NavLink>
             <NavLink to="/foundit" className={linkClass}>
-            My finds
+              Found by Me
             </NavLink>
             <span className="mx-1 h-5 w-px bg-zinc-200" />
           </div>
@@ -160,11 +163,18 @@ const Navbar = () => {
               Lost Items
             </NavLink>
             <NavLink
+              to="/mylosts"
+              className={mobileLinkClass}
+              onClick={() => setMenuOpen(false)}
+            >
+              Lost by Me
+            </NavLink>
+            <NavLink
               to="/foundit"
               className={mobileLinkClass}
               onClick={() => setMenuOpen(false)}
             >
-              My Finds
+              Found by Me
             </NavLink>
           </div>
 
