@@ -8,7 +8,6 @@ const FoundIt = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const userId = localStorage.getItem("userId");
 
   const fetchFoundData = async () => {
     try {
@@ -18,7 +17,6 @@ const FoundIt = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            userId: userId,
           },
         },
       );
