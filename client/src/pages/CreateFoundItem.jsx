@@ -89,10 +89,7 @@ const CreateFoundItem = () => {
         </div>
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8 shadow-sm">
-          <form
-            onSubmit={handleSubmit(handleCreateFoundItemSubmit)}
-            noValidate
-          >
+          <form onSubmit={handleSubmit(handleCreateFoundItemSubmit)} noValidate>
             <div className="flex flex-col gap-5">
               <div>
                 <label

@@ -60,7 +60,7 @@ const LostIt = () => {
               Lost items
             </div>
             <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900">
-              What was lost
+              All lost items
             </h1>
             <p className="mt-2 text-sm md:text-base text-zinc-500">
               Browse recently reported lost items and help reunite them.

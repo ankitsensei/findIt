@@ -54,10 +54,10 @@ const Navbar = () => {
               Home
             </NavLink>
             <NavLink to="/lostit" className={linkClass}>
-              Lost It
+              Lost Items
             </NavLink>
             <NavLink to="/foundit" className={linkClass}>
-              Found It
+            My finds
             </NavLink>
             <span className="mx-1 h-5 w-px bg-zinc-200" />
           </div>
@@ -157,14 +157,14 @@ const Navbar = () => {
               className={mobileLinkClass}
               onClick={() => setMenuOpen(false)}
             >
-              Lost It
+              Lost Items
             </NavLink>
             <NavLink
               to="/foundit"
               className={mobileLinkClass}
               onClick={() => setMenuOpen(false)}
             >
-              Found It
+              My Finds
             </NavLink>
           </div>
 
