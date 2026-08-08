@@ -86,6 +86,8 @@ const createFoundItem = async (req, res) => {
     }
 
     const { name, description, location } = req.body;
+    const latitude = req.body.latitude ? Number(req.body.latitude) : null;
+    const longitude = req.body.longitude ? Number(req.body.longitude) : null;
 
     if (!name || !description || !location) {
       return res
@@ -96,8 +98,8 @@ const createFoundItem = async (req, res) => {
     const image = await uploadImage(req.file.buffer, "findit/found-items");
 
     const results = await pool.query(
-      "INSERT INTO founditems (name, description, image_url, image_public_id, location, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [name, description, image.secure_url, image.public_id, location, req.user.id],
+      "INSERT INTO founditems (name, description, image_url, image_public_id, location, latitude, longitude, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [name, description, image.secure_url, image.public_id, location, latitude, longitude, req.user.id],
     );
     res.status(201).json(results.rows[0]);
   } catch (error) {
@@ -109,11 +111,13 @@ const createFoundItem = async (req, res) => {
 const updateFoundItem = async (req, res) => {
   const id = req.params.id;
   const { name, description, image_url, image_public_id, location } = req.body;
+  const latitude = req.body.latitude ? Number(req.body.latitude) : null;
+  const longitude = req.body.longitude ? Number(req.body.longitude) : null;
 
   try {
     const result = await pool.query(
-      `UPDATE founditems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, updated_at = NOW() WHERE id = $6 RETURNING *`,
-      [name, description, image_url, image_public_id, location, id],
+      `UPDATE founditems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, latitude = $6, longitude = $7, updated_at = NOW() WHERE id = $8 RETURNING *`,
+      [name, description, image_url, image_public_id, location, latitude, longitude, id],
     );
 
     if (result.rowCount === 0) {

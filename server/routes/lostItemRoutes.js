@@ -134,6 +134,8 @@ const createLostItem = async (req, res) => {
     }
 
     const { name, description, location } = req.body;
+    const latitude = req.body.latitude ? Number(req.body.latitude) : null;
+    const longitude = req.body.longitude ? Number(req.body.longitude) : null;
 
     if (!name || !description || !location) {
       return res
@@ -144,13 +146,15 @@ const createLostItem = async (req, res) => {
     const image = await uploadImage(req.file.buffer, "findit/lost-items");
 
     const results = await pool.query(
-      "INSERT INTO lostitems (name, description, image_url, image_public_id, location, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      "INSERT INTO lostitems (name, description, image_url, image_public_id, location, latitude, longitude, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
       [
         name,
         description,
         image.secure_url,
         image.public_id,
         location,
+        latitude,
+        longitude,
         req.user.id,
       ],
     );
@@ -164,11 +168,13 @@ const createLostItem = async (req, res) => {
 const updateLostItem = async (req, res) => {
   const id = req.params.id;
   const { name, description, image_url, image_public_id, location } = req.body;
+  const latitude = req.body.latitude ? Number(req.body.latitude) : null;
+  const longitude = req.body.longitude ? Number(req.body.longitude) : null;
 
   try {
     const result = await pool.query(
-      `UPDATE lostitems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, updated_at = NOW() WHERE id = $6 RETURNING *`,
-      [name, description, image_url, image_public_id, location, id],
+      `UPDATE lostitems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, latitude = $6, longitude = $7, updated_at = NOW() WHERE id = $8 RETURNING *`,
+      [name, description, image_url, image_public_id, location, latitude, longitude, id],
     );
     if (result.rowCount === 0) {
       return res.status(400).json({ message: "Item not found." });
