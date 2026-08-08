@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
-import { Package, MapPin, Image, Upload } from "lucide-react";
+import { Package, Image, Upload } from "lucide-react";
+import LocationPicker from "../components/LocationPicker";
 
 const CreateFoundItem = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -10,6 +11,7 @@ const CreateFoundItem = () => {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
@@ -17,6 +19,8 @@ const CreateFoundItem = () => {
       name: "",
       description: "",
       location: "",
+      latitude: null,
+      longitude: null,
       image: "",
     },
   });
@@ -39,6 +43,8 @@ const CreateFoundItem = () => {
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("location", data.location);
+    formData.append("latitude", data.latitude);
+    formData.append("longitude", data.longitude);
     formData.append("image", data.image[0]);
 
     setSubmitLoading(true);
@@ -153,22 +159,35 @@ const CreateFoundItem = () => {
                 >
                   Location
                 </label>
-                <div className="relative">
-                  <MapPin
-                    size={16}
-                    strokeWidth={2}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-                  />
-                  <input
-                    id="location"
-                    type="text"
-                    placeholder="e.g. City park, Main Road"
-                    className={inputClass(errors.location)}
-                    {...register("location", {
-                      required: "Location is required",
-                    })}
-                  />
-                </div>
+                <LocationPicker
+                  value={{
+                    location: watch("location"),
+                    latitude: watch("latitude"),
+                    longitude: watch("longitude"),
+                  }}
+                  onChange={({ location, latitude, longitude }) => {
+                    setValue("location", location, { shouldValidate: true });
+                    setValue("latitude", latitude, { shouldValidate: true });
+                    setValue("longitude", longitude, {
+                      shouldValidate: true,
+                    });
+                  }}
+                />
+                <input
+                  type="hidden"
+                  {...register("location", {
+                    required: "Please pin the location on the map",
+                  })}
+                />
+                <input
+                  type="hidden"
+                  {...register("latitude", {
+                    required: "Please pin the location on the map",
+                    validate: (v) =>
+                      typeof v === "number" || "Please pin the location on the map",
+                  })}
+                />
+                <input type="hidden" {...register("longitude")} />
                 {errors.location && (
                   <p className="mt-1.5 text-xs text-red-600">
                     {errors.location.message}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { MapPin, Clock, ArrowLeft } from "lucide-react";
+import MapView from "./MapView";
 
 const ViewDetails = () => {
   const { id } = useParams();
@@ -70,6 +71,12 @@ const ViewDetails = () => {
     );
   }
 
+  const hasCoords =
+    typeof item.latitude === "number" &&
+    typeof item.longitude === "number" &&
+    Number.isFinite(item.latitude) &&
+    Number.isFinite(item.longitude);
+
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-3xl">
@@ -128,6 +135,26 @@ const ViewDetails = () => {
                 <span>{user.username}</span>
               </div>
             </div>
+
+            {hasCoords && (
+              <div className="mt-8">
+                <p className="mb-2 text-sm font-medium text-zinc-700">
+                  Location on map
+                </p>
+                <MapView
+                  center={[item.latitude, item.longitude]}
+                  zoom={15}
+                  markers={[
+                    {
+                      lat: item.latitude,
+                      lng: item.longitude,
+                      title: item.location,
+                    },
+                  ]}
+                  className="h-64 w-full overflow-hidden rounded-xl border border-zinc-200 z-0"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

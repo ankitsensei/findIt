@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { MapPin, Clock, Search, Plus } from "lucide-react";
+import MapView from "../components/MapView";
 
 const FoundIt = () => {
   const [foundData, setFoundData] = useState([]);
@@ -50,6 +51,21 @@ const FoundIt = () => {
     );
   }
 
+  const mapMarkers = foundData
+    .filter(
+      (item) =>
+        item.latitude != null &&
+        item.longitude != null &&
+        Number.isFinite(Number(item.latitude)) &&
+        Number.isFinite(Number(item.longitude)),
+    )
+    .map((item) => ({
+      lat: Number(item.latitude),
+      lng: Number(item.longitude),
+      title: item.name,
+      popupHtml: `<a href="/foundit/${item.id}" style="font-weight:600;color:#18181b;text-decoration:none">${item.name}</a><br/><span style="font-size:12px;color:#71717a">${item.location}</span>`,
+    }));
+
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-7xl">
@@ -93,6 +109,18 @@ const FoundIt = () => {
             className="w-full rounded-xl border border-zinc-200 bg-white py-2.5 pl-11 pr-4 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
           />
         </div>
+
+        {mapMarkers.length > 0 && (
+          <div className="mt-8">
+            <p className="mb-3 text-sm font-semibold text-zinc-900">
+              View on map
+            </p>
+            <MapView
+              markers={mapMarkers}
+              className="h-80 w-full overflow-hidden rounded-2xl border border-zinc-200 z-0"
+            />
+          </div>
+        )}
 
         {foundData.length === 0 ? (
           <div className="mt-8 flex flex-col items-center rounded-2xl border border-dashed border-zinc-300 bg-white/60 px-6 py-16 text-center">
