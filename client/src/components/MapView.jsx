@@ -11,11 +11,6 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIconRetinaUrl,
   shadowUrl: markerShadowUrl,
 });
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIconUrl,
-  iconRetinaUrl: markerIconRetinaUrl,
-  shadowUrl: markerShadowUrl,
-});
 
 const DEFAULT_CENTER = [20.5937, 78.9629];
 const DEFAULT_ZOOM = 5;

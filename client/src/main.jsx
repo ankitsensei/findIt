@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 import "./index.css";
 import Navbar from "./components/Navbar.jsx";
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Navbar />
+      <Toaster />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/lostit" element={<LostIt />} />
