@@ -174,7 +174,16 @@ const updateLostItem = async (req, res) => {
   try {
     const result = await pool.query(
       `UPDATE lostitems SET name = $1, description = $2, image_url = $3, image_public_id = $4, location = $5, latitude = $6, longitude = $7, updated_at = NOW() WHERE id = $8 RETURNING *`,
-      [name, description, image_url, image_public_id, location, latitude, longitude, id],
+      [
+        name,
+        description,
+        image_url,
+        image_public_id,
+        location,
+        latitude,
+        longitude,
+        id,
+      ],
     );
     if (result.rowCount === 0) {
       return res.status(400).json({ message: "Item not found." });
