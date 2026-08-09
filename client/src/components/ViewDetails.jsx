@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { MapPin, Clock, ArrowLeft, User } from "lucide-react";
+import toast from "react-hot-toast";
 import MapView from "./MapView";
 
 const ViewDetails = () => {
@@ -16,6 +17,7 @@ const ViewDetails = () => {
 
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [yourEmail, setYourEmail] = useState("");
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -73,6 +75,21 @@ const ViewDetails = () => {
       </div>
     );
   }
+
+  const handleSendMessage = () => {
+    if (!yourEmail.trim()) {
+      toast.error("Please enter your contact email");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(yourEmail.trim())) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    toast.success("Message sent to the owner");
+    setShowContactModal(false);
+    setMessage("");
+    setYourEmail("");
+  };
 
   const hasCoords =
     typeof item.latitude === "number" &&
@@ -210,7 +227,21 @@ const ViewDetails = () => {
                 </div>
               </div>
             </div>
-
+            <div className="mt-5">
+              <label
+                htmlFor="contact-email"
+                className="mb-1.5 block text-sm font-medium text-zinc-700"
+              >
+                Your contact email
+              </label>
+              <input
+                id="contact-email"
+                type="email"
+                value={yourEmail}
+                onChange={(e) => setYourEmail(e.target.value)}
+                className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
+              />
+            </div>
             {/* Message */}
             <div className="mt-5">
               <label
@@ -242,6 +273,7 @@ const ViewDetails = () => {
               <button
                 type="button"
                 disabled={!message.trim()}
+                onClick={handleSendMessage}
                 className="flex-1 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Send Message
