@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { MapPin, Clock, ArrowLeft } from "lucide-react";
+import { MapPin, Clock, ArrowLeft, User } from "lucide-react";
 import MapView from "./MapView";
 
 const ViewDetails = () => {
@@ -115,7 +115,7 @@ const ViewDetails = () => {
               {item.description}
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-zinc-500">
+            <div className="mt-8 flex flex-col sm:flex-col sm:items-start gap-4 text-sm text-zinc-500">
               <div className="flex items-center gap-2">
                 <MapPin size={16} strokeWidth={1.8} />
                 <span>{item.location}</span>
@@ -131,6 +131,7 @@ const ViewDetails = () => {
                 </span>
               </div>
               <div className="flex items-center gap-2">
+                <User size={16} strokeWidth={1.8} />
                 <p>Posted by:</p>
                 <span>{user.username}</span>
               </div>
