@@ -14,6 +14,9 @@ const ViewDetails = () => {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     const fetchItem = async () => {
       try {
@@ -156,9 +159,97 @@ const ViewDetails = () => {
                 />
               </div>
             )}
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowContactModal(true)}
+                className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] cursor-pointer"
+              >
+                Contact Owner
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      {showContactModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+          onClick={() => setShowContactModal(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-5">
+              <h2 className="text-xl font-semibold text-zinc-900">
+                Contact Owner
+              </h2>
+              <p className="mt-1 text-sm text-zinc-500">
+                Send a message about this item.
+              </p>
+            </div>
+
+            {/* Item preview */}
+            <div className="flex gap-4 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+              <img
+                src={item.image_url}
+                alt={item.name}
+                className="h-20 w-20 rounded-lg object-cover"
+              />
+
+              <div className="min-w-0">
+                <h3 className="font-medium text-zinc-900">{item.name}</h3>
+
+                <p className="mt-1 line-clamp-2 text-xs text-zinc-500">
+                  {item.description}
+                </p>
+
+                <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-500">
+                  <MapPin size={13} />
+                  {item.location}
+                </div>
+              </div>
+            </div>
+
+            {/* Message */}
+            <div className="mt-5">
+              <label
+                htmlFor="contact-message"
+                className="mb-1.5 block text-sm font-medium text-zinc-700"
+              >
+                Your message
+              </label>
+
+              <textarea
+                id="contact-message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={5}
+                placeholder="Hi, I think this might be my item..."
+                className="w-full resize-none rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
+              />
+            </div>
+
+            <div className="mt-5 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowContactModal(false)}
+                className="flex-1 rounded-xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={!message.trim()}
+                className="flex-1 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
