@@ -24,6 +24,10 @@ const LocationPicker = ({ value, onChange }) => {
   const [locating, setLocating] = useState(false);
   const mapRef = useRef(null);
 
+  useEffect(() => {
+    setQuery(value?.location ?? "");
+  }, [value?.location]);
+
   const hasCoords =
     value &&
     typeof value.latitude === "number" &&
@@ -123,7 +127,11 @@ const LocationPicker = ({ value, onChange }) => {
                 onClick={() => handleSelectResult(r)}
                 className="flex w-full items-start gap-2 px-4 py-2.5 text-left text-sm text-zinc-700 transition hover:bg-zinc-50 cursor-pointer"
               >
-                <MapPin size={14} strokeWidth={2} className="mt-0.5 shrink-0 text-zinc-400" />
+                <MapPin
+                  size={14}
+                  strokeWidth={2}
+                  className="mt-0.5 shrink-0 text-zinc-400"
+                />
                 <span className="line-clamp-2">{r.display_name}</span>
               </button>
             </li>
@@ -135,7 +143,17 @@ const LocationPicker = ({ value, onChange }) => {
         pickerMode
         center={hasCoords ? [value.latitude, value.longitude] : undefined}
         zoom={hasCoords ? 15 : undefined}
-        markers={hasCoords ? [{ lat: value.latitude, lng: value.longitude, title: value.location }] : []}
+        markers={
+          hasCoords
+            ? [
+                {
+                  lat: value.latitude,
+                  lng: value.longitude,
+                  title: value.location,
+                },
+              ]
+            : []
+        }
         onPick={handlePick}
         onMapReady={(map) => {
           mapRef.current = map;
