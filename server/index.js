@@ -1,7 +1,10 @@
 import express from "express";
+import passport from "passport";
+import "./config/passport.js";
 import * as lostItemRoutes from "./routes/lostItemRoutes.js";
 import * as foundItemRoutes from "./routes/foundItemRoutes.js";
 import * as userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import auth from "./middleware/auth.js";
 import cors from "cors";
 import upload from "./middleware/upload.js";
@@ -18,6 +21,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/login", userRoutes.login);
+
+// Auth route
+app.use("/auth", authRoutes);
 
 // Users routing
 app.get("/users", userRoutes.getUsers);
