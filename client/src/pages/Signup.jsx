@@ -255,6 +255,15 @@ const Signup = () => {
               </button>
             </div>
           </form>
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = "http://localhost:3000/auth/google";
+            }}
+            className="mt-2 w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+          >
+            Continue with Google
+          </button>
         </div>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
