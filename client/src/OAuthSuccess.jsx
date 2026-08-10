@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
+import toast from "react-hot-toast";
 
 const OAuthSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -7,14 +8,17 @@ const OAuthSuccess = () => {
 
   useEffect(() => {
     const token = searchParams.get("token");
+    const userId = searchParams.get("user");
 
-    if (!token) {
+    if (!token || !userId) {
+      toast.error("Google sign in failed. Please try again.");
       navigate("/signin");
       return;
     }
 
     localStorage.setItem("token", token);
-
+    localStorage.setItem("userId", userId);
+    toast.success("Signed in with Google successfully!");
     navigate("/");
   }, [navigate, searchParams]);
 
