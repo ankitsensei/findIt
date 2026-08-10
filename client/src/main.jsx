@@ -22,7 +22,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Navbar />
-      <Toaster />
+      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/lostit" element={<LostIt />} />

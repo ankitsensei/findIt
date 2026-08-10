@@ -4,7 +4,7 @@ import { NavLink, useNavigate, useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
 import Logo from "../assets/logo.jpeg";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +55,6 @@ const Signin = () => {
 
   return (
     <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-zinc-50 px-4 py-12">
-      <Toaster />
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <NavLink to="/" className="inline-flex items-center gap-2.5">
