@@ -27,6 +27,18 @@ const VerifyEmail = () => {
     }
   };
 
+  const handleResend = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/resend-otp", {
+        userId,
+      });
+
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to resend code");
+    }
+  };
+
   return (
     <form onSubmit={handleVerify}>
       <input
@@ -39,6 +51,10 @@ const VerifyEmail = () => {
       />
 
       <button type="submit">Verify Email</button>
+
+      <button type="button" onClick={handleResend}>
+        Resend Code
+      </button>
     </form>
   );
 };
