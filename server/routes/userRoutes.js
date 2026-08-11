@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import generateOTP from "../utils/generateOTP";
-import transporter from "../config/mailer";
+import generateOTP from "../utils/generateOTP.js";
+import transporter from "../config/mailer.js";
 import jwt from "jsonwebtoken";
 import pg from "pg";
 const { Pool } = pg;
