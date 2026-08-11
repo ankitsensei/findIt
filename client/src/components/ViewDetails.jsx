@@ -17,7 +17,7 @@ const ViewDetails = () => {
 
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
-  const [yourEmail, setYourEmail] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -76,19 +76,41 @@ const ViewDetails = () => {
     );
   }
 
-  const handleSendMessage = () => {
-    if (!yourEmail.trim()) {
-      toast.error("Please enter your contact email");
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      toast.error("Please enter a message");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(yourEmail.trim())) {
-      toast.error("Please enter a valid email address");
-      return;
+
+    setIsSending(true);
+    try {
+      const response = await fetch(`http://localhost:3000/contact-owner`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          type,
+          itemId: id,
+          message: message.trim(),
+        }),
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        throw new Error(json.message || "Failed to send message");
+      }
+
+      toast.success(json.message || "Message sent to the owner");
+      setShowContactModal(false);
+      setMessage("");
+    } catch (error) {
+      toast.error(error.message || "Failed to send message");
+    } finally {
+      setIsSending(false);
     }
-    toast.success("Message sent to the owner");
-    setShowContactModal(false);
-    setMessage("");
-    setYourEmail("");
   };
 
   const hasCoords =
@@ -229,22 +251,6 @@ const ViewDetails = () => {
             </div>
             <div className="mt-5">
               <label
-                htmlFor="contact-email"
-                className="mb-1.5 block text-sm font-medium text-zinc-700"
-              >
-                Your contact email
-              </label>
-              <input
-                id="contact-email"
-                type="email"
-                value={yourEmail}
-                onChange={(e) => setYourEmail(e.target.value)}
-                className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
-              />
-            </div>
-            {/* Message */}
-            <div className="mt-5">
-              <label
                 htmlFor="contact-message"
                 className="mb-1.5 block text-sm font-medium text-zinc-700"
               >
@@ -272,11 +278,11 @@ const ViewDetails = () => {
 
               <button
                 type="button"
-                disabled={!message.trim()}
+                disabled={!message.trim() || isSending}
                 onClick={handleSendMessage}
                 className="flex-1 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Send Message
+                {isSending ? "Sending..." : "Send Message"}
               </button>
             </div>
           </div>

@@ -326,6 +326,76 @@ const resendOtp = async (req, res) => {
   }
 };
 
+// Contact the owner of an item
+const contactOwner = async (req, res) => {
+  const { type, itemId, message } = req.body;
+
+  if (type !== "lost" && type !== "found") {
+    return res.status(400).json({ message: "Invalid item type" });
+  }
+
+  if (!itemId || !message?.trim()) {
+    return res.status(400).json({ message: "Message is required" });
+  }
+
+  const table = type === "lost" ? "lostitems" : "founditems";
+
+  try {
+    const sender = await pool.query(
+      `SELECT id, username, email FROM users WHERE id = $1`,
+      [req.user.id],
+    );
+    if (sender.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const item = await pool.query(
+      `SELECT id, name, user_id FROM ${table} WHERE id = $1`,
+      [itemId],
+    );
+    if (item.rows.length === 0) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    const owner = await pool.query(
+      `SELECT id, username, email FROM users WHERE id = $1`,
+      [item.rows[0].user_id],
+    );
+    if (owner.rows.length === 0) {
+      return res.status(404).json({ message: "Owner not found" });
+    }
+
+    const senderData = sender.rows[0];
+    const ownerData = owner.rows[0];
+    const itemData = item.rows[0];
+
+    await transporter.sendMail({
+      from: `"${senderData.username}" <${senderData.email}>`,
+      to: ownerData.email,
+      replyTo: senderData.email,
+      subject: `Message about "${itemData.name}" on findIt`,
+      text: `${message}\n\n---\nReply to: ${senderData.email}`,
+      html: `
+        <h3>Hi ${ownerData.username},</h3>
+        <p>You received a message about your findIt item
+          <strong>"${itemData.name}"</strong>:</p>
+        <blockquote style="margin: 16px 0; padding: 12px 16px;
+          border-left: 3px solid #d4d4d8; color: #18181b;">
+          ${message.replace(/\n/g, "<br/>")}
+        </blockquote>
+        <p>Reply to:
+          <a href="mailto:${senderData.email}">${senderData.email}</a>
+        </p>
+      `,
+    });
+
+    return res.status(200).json({ message: "Message sent to the owner" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -392,6 +462,7 @@ export {
   createUser,
   verifyEmail,
   resendOtp,
+  contactOwner,
   updateUser,
   deleteUser,
 };
