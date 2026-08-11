@@ -36,7 +36,7 @@ const Profile = () => {
 
   const handleUserProfile = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/me`, {
+      const response = await fetch(`https://find-it-server-ivory.vercel.app/me`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -48,6 +48,22 @@ const Profile = () => {
       }
       const user = await response.json();
       setUserData(user);
+
+      try {
+        const statsResponse = await fetch(
+          `https://find-it-server-ivory.vercel.app/me/stats`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json();
+          setStats(statsData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     } catch (error) {
       console.error(error);
       toast.error("Failed to load profile");
@@ -121,7 +137,7 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/updateuser/${userData.id}`,
+        `https://find-it-server-ivory.vercel.app/updateuser/${userData.id}`,
         {
           method: "PUT",
           headers: {
