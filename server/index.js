@@ -30,6 +30,7 @@ app.get("/users", userRoutes.getUsers);
 app.get("/users/:id", userRoutes.getUser);
 app.get("/me", auth, userRoutes.getMe);
 app.post("/createuser", userRoutes.createUser);
+app.post("/verify-email", userRoutes.verifyEmail);
 app.put("/updateuser/:id", auth, userRoutes.updateUser);
 app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 

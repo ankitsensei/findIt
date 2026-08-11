@@ -172,6 +172,71 @@ const createUser = async (req, res) => {
   }
 };
 
+// Verify Email
+const verifyEmail = async (req, res) => {
+  const { userId, otp } = req.body;
+
+  try {
+    const result = await pool.query(
+      `SELECT *
+       FROM email_verifications
+       WHERE user_id = $1
+       ORDER BY created_at DESC
+       LIMIT 1`,
+      [userId],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({
+        message: "Verification code not found",
+      });
+    }
+
+    const verification = result.rows[0];
+
+    // Check expiry
+    if (new Date() > new Date(verification.expires_at)) {
+      return res.status(400).json({
+        message: "Verification code expired",
+      });
+    }
+
+    // Compare OTP
+    const isValid = await bcrypt.compare(otp, verification.otp_hash);
+
+    if (!isValid) {
+      return res.status(400).json({
+        message: "Invalid verification code",
+      });
+    }
+
+    // Mark email as verified
+    await pool.query(
+      `UPDATE users
+       SET email_verified = true
+       WHERE id = $1`,
+      [userId],
+    );
+
+    // Delete used OTP
+    await pool.query(
+      `DELETE FROM email_verifications
+       WHERE user_id = $1`,
+      [userId],
+    );
+
+    return res.status(200).json({
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -230,4 +295,13 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { login, getUsers, getMe, getUser, createUser, updateUser, deleteUser };
+export {
+  login,
+  getUsers,
+  getMe,
+  getUser,
+  createUser,
+  verifyEmail,
+  updateUser,
+  deleteUser,
+};
