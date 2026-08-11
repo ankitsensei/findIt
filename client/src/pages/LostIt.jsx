@@ -14,7 +14,7 @@ const LostIt = () => {
   const fetchLostData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/lostItems?page=${page}&search=${encodeURIComponent(search)}`,
+        `https://find-it-server-ivory.vercel.app/lostItems?page=${page}&search=${encodeURIComponent(search)}`,
         {
           method: "GET",
           headers: {

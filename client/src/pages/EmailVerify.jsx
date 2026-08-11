@@ -24,7 +24,7 @@ const VerifyEmail = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axios.post("http://localhost:3000/verify-email", {
+      const response = await axios.post("https://find-it-server-ivory.vercel.app/verify-email", {
         userId,
         otp,
       });
@@ -42,7 +42,7 @@ const VerifyEmail = () => {
   const handleResend = async () => {
     setIsResending(true);
     try {
-      const response = await axios.post("http://localhost:3000/resend-otp", {
+      const response = await axios.post("https://find-it-server-ivory.vercel.app/resend-otp", {
         userId,
       });
 

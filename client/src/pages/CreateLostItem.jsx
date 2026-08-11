@@ -49,7 +49,7 @@ const CreateLostItem = () => {
 
     setSubmitLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/lostitems`, {
+      const response = await fetch(`https://find-it-server-ivory.vercel.app/lostitems`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

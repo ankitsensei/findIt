@@ -14,7 +14,7 @@ const FoundIt = () => {
   const fetchFoundData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
+        `https://find-it-server-ivory.vercel.app/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
         {
           method: "GET",
           headers: {

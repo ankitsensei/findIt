@@ -28,7 +28,7 @@ const Signup = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:3000/createuser", {
+      const response = await axios.post("https://find-it-server-ivory.vercel.app/createuser", {
         username: data.username,
         email: data.email,
         password: data.password,
@@ -270,7 +270,7 @@ const Signup = () => {
           <button
             type="button"
             onClick={() => {
-              window.location.href = "http://localhost:3000/auth/google";
+              window.location.href = "https://find-it-server-ivory.vercel.app/auth/google";
             }}
             className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-300 bg-white py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] cursor-pointer"
           >

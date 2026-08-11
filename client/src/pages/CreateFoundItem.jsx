@@ -49,7 +49,7 @@ const CreateFoundItem = () => {
 
     setSubmitLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/foundItems`, {
+      const response = await fetch(`https://find-it-server-ivory.vercel.app/foundItems`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
