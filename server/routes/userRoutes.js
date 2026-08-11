@@ -163,7 +163,7 @@ const createUser = async (req, res) => {
     const otpHash = await bcrypt.hash(otp, 10);
 
     // 7. Set expiry to 10 minutes
-    const expiresAt = new Date(Date.now + 10 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     // 8. Store OTP
     await pool.query(
@@ -175,7 +175,7 @@ const createUser = async (req, res) => {
 
     // 9. Send email
     await transporter.sendMail({
-      from: `"FindIt" <${process.env.EMAIL_USER}`,
+      from: `"FindIt" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Verify your FindIt account",
       text: `Your FindIt verification code is ${otp}. It expires in 10 minutes.`,
@@ -266,6 +266,66 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+// Resend verification OTP
+const resendOtp = async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    const user = await pool.query(
+      `SELECT id, email, email_verified FROM users WHERE id = $1`,
+      [userId],
+    );
+
+    if (user.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.rows[0].email_verified) {
+      return res.status(400).json({ message: "Email already verified" });
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+    const otpHash = await bcrypt.hash(otp, 10);
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    // Store new OTP (replaces any previous unverified code)
+    await pool.query(
+      `DELETE FROM email_verifications WHERE user_id = $1`,
+      [userId],
+    );
+    await pool.query(
+      `INSERT INTO email_verifications
+        (user_id, otp_hash, expires_at)
+       VALUES ($1, $2, $3)`,
+      [userId, otpHash, expiresAt],
+    );
+
+    // Send email
+    await transporter.sendMail({
+      from: `"FindIt" <${process.env.EMAIL_USER}>`,
+      to: user.rows[0].email,
+      subject: "Verify your FindIt account",
+      text: `Your FindIt verification code is ${otp}. It expires in 10 minutes.`,
+      html: `
+        <h2>Verify your FindIt account</h2>
+        <p>Your verification code is:</p>
+
+        <h1>${otp}</h1>
+
+        <p>This code expires in 10 minutes.</p>
+      `,
+    });
+
+    return res.status(200).json({
+      message: "Verification OTP sent to your email",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -331,6 +391,7 @@ export {
   getUser,
   createUser,
   verifyEmail,
+  resendOtp,
   updateUser,
   deleteUser,
 };
