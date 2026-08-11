@@ -1,5 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
+import generateOTP from "../utils/generateOTP";
+import transporter from "../config/mailer";
 import jwt from "jsonwebtoken";
 import pg from "pg";
 const { Pool } = pg;
@@ -92,15 +94,81 @@ const getUser = async (req, res) => {
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    // 1. check whether email already exists
+    const existingUser = await pool.query(
+      `SELECT id, email_verified FROM users WHERE email = $1`,
+      [email],
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({
+        message: "Email already registered",
+      });
+    }
+
+    // 2. Check username
+    const existingUsername = await pool.query(
+      `SELECT id FROM users WHERE username = $1`,
+      [username],
+    );
+    if (existingUsername.rows.length > 0) {
+      return res.status(409).json({
+        message: "Username already taken",
+      });
+    }
+
+    // 3. Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 4. Create User
     const results = await pool.query(
       `INSERT INTO users (username, email, password) VALUES($1, $2, $3) RETURNING id, username, email, created_at`,
       [username, email, hashedPassword],
     );
-    res.status(201).json(results.rows[0]);
+    const user = results.rows[0];
+
+    // 5. Generate OTP
+    const otp = generateOTP();
+
+    // 6. Hash OTP
+    const otpHash = await bcrypt.hash(otp, 10);
+
+    // 7. Set expiry to 10 minutes
+    const expiresAt = new Date(Date.now + 10 * 60 * 1000);
+
+    // 8. Store OTP
+    await pool.query(
+      `INSERT INTO email_verifications
+        (user_id, otp_hash, expires_at)
+       VALUES ($1, $2, $3)`,
+      [user.id, otpHash, expiresAt],
+    );
+
+    // 9. Send email
+    await transporter.sendMail({
+      from: `"FindIt" <${process.env.EMAIL_USER}`,
+      to: email,
+      subject: "Verify your FindIt account",
+      text: `Your FindIt verification code is ${otp}. It expires in 10 minutes.`,
+      html: `
+        <h2>Verify your FindIt account</h2>
+        <p>Your verification code is:</p>
+
+        <h1>${otp}</h1>
+
+        <p>This code expires in 10 minutes.</p>
+      `,
+    });
+
+    return res.status(201).json({
+      message: "Verification OTP sent to your email",
+      userId: user.id,
+    });
+
+    // res.status(201).json(results.rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
