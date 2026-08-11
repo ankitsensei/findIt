@@ -17,6 +17,7 @@ import Profile from "./pages/Profile.jsx";
 import CreateLostItem from "./pages/CreateLostItem.jsx";
 import CreateFoundItem from "./pages/CreateFoundItem.jsx";
 import OAuthSuccess from "./OAuthSuccess.jsx";
+import VerifyEmail from "./pages/EmailVerify.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -37,6 +38,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/createlostitem" element={<CreateLostItem />} />
         <Route path="/createfounditem" element={<CreateFoundItem />} />
         <Route path="/oauth-success" element={<OAuthSuccess />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

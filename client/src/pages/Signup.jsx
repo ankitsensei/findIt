@@ -33,16 +33,22 @@ const Signup = () => {
         email: data.email,
         password: data.password,
       });
+
       console.log(response.data);
-      toast.success("Account created successfully!");
+
+      toast.success("Account created! Please verify your email.");
+
       setTimeout(() => {
-        navigate("/signin");
-      }, 1500);
+        navigate(`/verify-email?userId=${response.data.userId}`);
+      }, 1000);
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Something went wrong. Please try again.";
-      toast.error(typeof message === "string" ? message : "Signup failed");
       console.error(error);
+
+      const message =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      toast.error(typeof message === "string" ? message : "Signup failed");
     }
   };
 
