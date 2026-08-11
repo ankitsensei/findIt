@@ -290,10 +290,9 @@ const resendOtp = async (req, res) => {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     // Store new OTP (replaces any previous unverified code)
-    await pool.query(
-      `DELETE FROM email_verifications WHERE user_id = $1`,
-      [userId],
-    );
+    await pool.query(`DELETE FROM email_verifications WHERE user_id = $1`, [
+      userId,
+    ]);
     await pool.query(
       `INSERT INTO email_verifications
         (user_id, otp_hash, expires_at)
@@ -396,6 +395,32 @@ const contactOwner = async (req, res) => {
   }
 };
 
+// Get stats for the current user (profile dashboard)
+const getUserStats = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const results = await pool.query(
+      `SELECT
+        (SELECT COUNT(*) FROM lostitems WHERE user_id = $1)::int AS lostposted,
+        (SELECT COUNT(*) FROM founditems WHERE user_id = $1)::int AS foundposted,
+        (SELECT COUNT(*) FROM lostitems WHERE user_id = $1 AND status = 'resolved')::int
+          + (SELECT COUNT(*) FROM founditems WHERE user_id = $1 AND status = 'resolved')::int
+          AS returned`,
+      [userId],
+    );
+    const { lostposted, foundposted, returned } = results.rows[0];
+    return res.status(200).json({
+      lostPosted: Number(lostposted),
+      foundPosted: Number(foundposted),
+      returned: Number(returned),
+      totalReports: Number(lostposted) + Number(foundposted),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -465,4 +490,5 @@ export {
   contactOwner,
   updateUser,
   deleteUser,
+  getUserStats,
 };
