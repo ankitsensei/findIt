@@ -14,15 +14,17 @@ const ViewDetails = () => {
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const currentUserId = localStorage.getItem("userId");
 
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [isResolving, setIsResolving] = useState(false);
 
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/${type}Items/${id}`, {
+        const res = await fetch(`https://find-it-server-ivory.vercel.app/${type}Items/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +46,7 @@ const ViewDetails = () => {
     if (!item) return;
     const fetchUser = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/users/${item.user_id}`);
+        const res = await fetch(`https://find-it-server-ivory.vercel.app/users/${item.user_id}`);
         const json = await res.json();
         setUser(json);
       } catch (error) {
@@ -84,7 +86,7 @@ const ViewDetails = () => {
 
     setIsSending(true);
     try {
-      const response = await fetch(`http://localhost:3000/contact-owner`, {
+      const response = await fetch(`https://find-it-server-ivory.vercel.app/contact-owner`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,6 +121,33 @@ const ViewDetails = () => {
     Number.isFinite(item.latitude) &&
     Number.isFinite(item.longitude);
 
+  const isResolved = item.status === "resolved";
+  const isOwner = String(item.user_id) === String(currentUserId);
+
+  const handleResolveItem = async () => {
+    setIsResolving(true);
+    try {
+      const res = await fetch(
+        `https://find-it-server-ivory.vercel.app/${type}Items/${id}/resolve`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to resolve item");
+      setItem({ ...item, status: "resolved" });
+      toast.success("Item marked as resolved");
+    } catch (error) {
+      toast.error(error.message || "Failed to resolve item");
+    } finally {
+      setIsResolving(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-3xl">
@@ -142,15 +171,22 @@ const ViewDetails = () => {
               <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900">
                 {item.name}
               </h1>
-              <span
-                className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
-                  type === "lost"
-                    ? "bg-red-100 text-red-600"
-                    : "bg-green-100 text-green-600"
-                }`}
-              >
-                {type === "lost" ? "LOST" : "FOUND"}
-              </span>
+              <div className="flex shrink-0 items-center gap-2">
+                <span
+                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+                    type === "lost"
+                      ? "bg-red-100 text-red-600"
+                      : "bg-green-100 text-green-600"
+                  }`}
+                >
+                  {type === "lost" ? "LOST" : "FOUND"}
+                </span>
+                {isResolved && (
+                  <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700">
+                    RESOLVED
+                  </span>
+                )}
+              </div>
             </div>
 
             <p className="mt-6 text-sm md:text-base leading-7 text-zinc-600">
@@ -199,13 +235,31 @@ const ViewDetails = () => {
               </div>
             )}
             <div>
-              <button
-                type="button"
-                onClick={() => setShowContactModal(true)}
-                className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] cursor-pointer"
-              >
-                Contact Owner
-              </button>
+              {isOwner ? (
+                isResolved ? (
+                  <div className="mt-4 w-full rounded-xl bg-emerald-50 px-5 py-3 text-center text-sm font-semibold text-emerald-700">
+                    Item resolved
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResolveItem}
+                    disabled={isResolving}
+                    className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                  >
+                    {isResolving ? "Resolving..." : "Mark as resolved"}
+                  </button>
+                )
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowContactModal(true)}
+                  disabled={isResolved}
+                  className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                >
+                  {isResolved ? "Item already resolved" : "Contact Owner"}
+                </button>
+              )}
             </div>
           </div>
         </div>
