@@ -33,12 +33,12 @@ const getLostItems = async (req, res) => {
   try {
     if (search) {
       const countResult = await pool.query(
-        `SELECT COUNT(*) FROM lostitems WHERE name ILIKE $1 OR description ILIKE $1`,
+        `SELECT COUNT(*) FROM lostitems WHERE (name ILIKE $1 OR description ILIKE $1) AND status = 'active'`,
         [`%${search}%`],
       );
       const totalItems = Number(countResult.rows[0].count);
       const results = await pool.query(
-        `SELECT * from lostitems WHERE name ILIKE $1 OR description ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+        `SELECT * from lostitems WHERE (name ILIKE $1 OR description ILIKE $1) AND status = 'active' ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
         [`%${search}%`, limit, offset],
       );
       return res.status(200).json({
@@ -49,10 +49,12 @@ const getLostItems = async (req, res) => {
       });
     }
 
-    const countResult = await pool.query(`SELECT COUNT(*) FROM lostitems`);
+    const countResult = await pool.query(
+      `SELECT COUNT(*) FROM lostitems WHERE status = 'active'`,
+    );
     const totalItems = Number(countResult.rows[0].count);
     const results = await pool.query(
-      "SELECT * FROM lostitems ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+      "SELECT * FROM lostitems WHERE status = 'active' ORDER BY created_at DESC LIMIT $1 OFFSET $2",
       [limit, offset],
     );
     res.status(200).json({
@@ -195,6 +197,33 @@ const updateLostItem = async (req, res) => {
   }
 };
 
+const resolvedLostItem = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query(
+      `UPDATE lostitems SET status = 'resolved', updated_at = NOW() WHERE id = $1 AND user_id = $2 AND status = 'active' RETURNING *`,
+      [id, userId],
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Item not found or you are not the owner",
+      });
+    }
+    return res.status(200).json({
+      message: "Item marked as resolved",
+      item: result.rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const softDeleteLostItem = async (req, res) => {
   const id = req.params.id;
   try {
@@ -225,6 +254,7 @@ export {
   getLostItemById,
   createLostItem,
   updateLostItem,
+  resolvedLostItem,
   softDeleteLostItem,
   deleteLostItem,
 };
