@@ -15,7 +15,8 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://localhost:5173/signin?error=google_auth_failed",
+    failureRedirect:
+      "https://find-it-rho.vercel.app/signin?error=google_auth_failed",
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -28,9 +29,8 @@ router.get(
         expiresIn: "7d",
       },
     );
-
     res.redirect(
-      `http://localhost:5173/oauth-success?token=${token}&user=${req.user.id}`,
+      `https://find-it-rho.vercel.app/oauth-success?token=${token}&user=${req.user.id}`,
     );
   },
 );
