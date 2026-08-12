@@ -420,6 +420,30 @@ const getUserStats = async (req, res) => {
   }
 };
 
+// Get resolved items for the current user (profile)
+const getResolvedItems = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const lost = await pool.query(
+      `SELECT 'lost' AS type, id, name, description, image_url, location, status, created_at, updated_at
+       FROM lostitems WHERE user_id = $1 AND status = 'resolved'`,
+      [userId],
+    );
+    const found = await pool.query(
+      `SELECT 'found' AS type, id, name, description, image_url, location, status, created_at, updated_at
+       FROM founditems WHERE user_id = $1 AND status = 'resolved'`,
+      [userId],
+    );
+    const items = [...lost.rows, ...found.rows].sort(
+      (a, b) => new Date(b.updated_at) - new Date(a.updated_at),
+    );
+    return res.status(200).json({ items });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -490,4 +514,5 @@ export {
   updateUser,
   deleteUser,
   getUserStats,
+  getResolvedItems,
 };

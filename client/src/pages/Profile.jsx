@@ -29,6 +29,8 @@ const Profile = () => {
     returned: 0,
     totalReports: 0,
   });
+  const [resolvedItems, setResolvedItems] = useState([]);
+  const [unresolvingId, setUnresolvingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openEditWindow, setOpenEditWindow] = useState(false);
   const [usernameDraft, setUsernameDraft] = useState("");
@@ -60,6 +62,22 @@ const Profile = () => {
         if (statsResponse.ok) {
           const statsData = await statsResponse.json();
           setStats(statsData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      try {
+        const resolvedResponse = await fetch(
+          `https://find-it-server-ivory.vercel.app/me/resolvedItems`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        if (resolvedResponse.ok) {
+          const resolvedData = await resolvedResponse.json();
+          setResolvedItems(resolvedData.items ?? []);
         }
       } catch (error) {
         console.error(error);
@@ -157,6 +175,31 @@ const Profile = () => {
       toast.success("Username updated successfully");
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleUnresolve = async (item) => {
+    setUnresolvingId(item.id);
+    try {
+      const response = await fetch(
+        `https://find-it-server-ivory.vercel.app/${item.type}Items/${item.id}/unresolve`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message || "Failed to reactivate item");
+      setResolvedItems((prev) => prev.filter((i) => i.id !== item.id));
+      setStats((prev) => ({ ...prev, returned: Math.max(0, prev.returned - 1) }));
+      toast.success("Item marked as active");
+    } catch (error) {
+      toast.error(error.message || "Failed to reactivate item");
+    } finally {
+      setUnresolvingId(null);
     }
   };
 
@@ -378,6 +421,88 @@ const Profile = () => {
               </p>
               <p className="mt-0.5 text-xs text-zinc-500">Total reports</p>
             </div>
+          </div>
+
+          <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-zinc-900">
+                  Resolved items
+                </h2>
+                <p className="mt-0.5 text-xs text-zinc-500">
+                  Items you've marked as returned. You can reactivate them.
+                </p>
+              </div>
+              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                {resolvedItems.length}
+              </span>
+            </div>
+
+            {resolvedItems.length === 0 ? (
+              <div className="mt-5 flex flex-col items-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/60 px-4 py-10 text-center">
+                <RotateCcw size={20} strokeWidth={1.8} className="text-zinc-400" />
+                <p className="mt-3 text-sm font-medium text-zinc-600">
+                  No resolved items yet
+                </p>
+                <p className="mt-1 text-xs text-zinc-400">
+                  Items you mark as resolved will show up here.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {resolvedItems.map((item) => (
+                  <article
+                    key={`${item.type}-${item.id}`}
+                    className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+                      <img
+                        src={item.image_url}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
+                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-white backdrop-blur">
+                        <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                        Resolved
+                      </span>
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-3 md:p-4">
+                      <h3 className="text-sm font-semibold tracking-tight text-zinc-900">
+                        {item.name}
+                      </h3>
+                      <p className="mt-1 line-clamp-2 text-xs text-zinc-500">
+                        {item.description}
+                      </p>
+
+                      <div className="mt-3 flex flex-col gap-2">
+                        <NavLink
+                          to={
+                            item.type === "lost"
+                              ? `/lostit/${item.id}`
+                              : `/foundit/${item.id}`
+                          }
+                          className="block w-full rounded-lg border border-zinc-200 py-1.5 text-center text-xs font-medium text-zinc-700 transition hover:border-zinc-900 hover:bg-zinc-900 hover:text-white"
+                        >
+                          View details
+                        </NavLink>
+                        <button
+                          type="button"
+                          onClick={() => handleUnresolve(item)}
+                          disabled={unresolvingId === item.id}
+                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-emerald-700 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                        >
+                          <RotateCcw size={12} strokeWidth={2} />
+                          {unresolvingId === item.id
+                            ? "Reactivating..."
+                            : "Mark as active"}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-2 md:gap-4">

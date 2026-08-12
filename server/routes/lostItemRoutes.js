@@ -224,6 +224,33 @@ const resolvedLostItem = async (req, res) => {
   }
 };
 
+const unresolveLostItem = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query(
+      `UPDATE lostitems SET status = 'active', updated_at = NOW() WHERE id = $1 AND user_id = $2 AND status = 'resolved' RETURNING *`,
+      [id, userId],
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Item not found or you are not the owner",
+      });
+    }
+    return res.status(200).json({
+      message: "Item marked as active",
+      item: result.rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const softDeleteLostItem = async (req, res) => {
   const id = req.params.id;
   try {
@@ -255,6 +282,7 @@ export {
   createLostItem,
   updateLostItem,
   resolvedLostItem,
+  unresolveLostItem,
   softDeleteLostItem,
   deleteLostItem,
 };

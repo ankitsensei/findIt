@@ -206,6 +206,33 @@ const resolvedFoundItem = async (req, res) => {
   }
 };
 
+const unresolveFoundItem = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query(
+      `UPDATE founditems SET status = 'active', updated_at = NOW() WHERE id = $1 AND user_id = $2 AND status = 'resolved' RETURNING *`,
+      [id, userId],
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Item not found or you are not the owner",
+      });
+    }
+    return res.status(200).json({
+      message: "Item marked as active",
+      item: result.rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const softDeleteFoundItem = async (req, res) => {
   const id = req.params.id;
   try {
@@ -237,6 +264,7 @@ export {
   createFoundItem,
   updateFoundItem,
   resolvedFoundItem,
+  unresolveFoundItem,
   softDeleteFoundItem,
   deleteFoundItem,
 };

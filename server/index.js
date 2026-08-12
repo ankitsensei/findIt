@@ -30,6 +30,7 @@ app.get("/users", userRoutes.getUsers);
 app.get("/users/:id", userRoutes.getUser);
 app.get("/me", auth, userRoutes.getMe);
 app.get("/me/stats", auth, userRoutes.getUserStats);
+app.get("/me/resolvedItems", auth, userRoutes.getResolvedItems);
 app.post("/createuser", userRoutes.createUser);
 app.post("/verify-email", userRoutes.verifyEmail);
 app.post("/resend-otp", userRoutes.resendOtp);
@@ -49,6 +50,7 @@ app.post(
 );
 app.put("/lostItems/:id", auth, lostItemRoutes.updateLostItem);
 app.patch("/lostItems/:id/resolve", auth, lostItemRoutes.resolvedLostItem);
+app.patch("/lostItems/:id/unresolve", auth, lostItemRoutes.unresolveLostItem);
 app.patch("/lostItems/:id", auth, lostItemRoutes.softDeleteLostItem);
 app.delete("/lostItems/:id", auth, lostItemRoutes.deleteLostItem);
 
@@ -64,6 +66,7 @@ app.post(
 );
 app.put("/foundItems/:id", auth, foundItemRoutes.updateFoundItem);
 app.patch("/foundItems/:id/resolve", auth, foundItemRoutes.resolvedFoundItem);
+app.patch("/foundItems/:id/unresolve", auth, foundItemRoutes.unresolveFoundItem);
 app.patch("/foundItems/:id", auth, foundItemRoutes.softDeleteFoundItem);
 app.delete("/foundItems/:id", auth, foundItemRoutes.deleteFoundItem);
 

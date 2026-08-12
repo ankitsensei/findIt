@@ -20,6 +20,7 @@ const ViewDetails = () => {
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
+  const [isUnresolving, setIsUnresolving] = useState(false);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -148,6 +149,30 @@ const ViewDetails = () => {
     }
   };
 
+  const handleUnresolveItem = async () => {
+    setIsUnresolving(true);
+    try {
+      const res = await fetch(
+        `https://find-it-server-ivory.vercel.app/${type}Items/${id}/unresolve`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to reactivate item");
+      setItem({ ...item, status: "active" });
+      toast.success("Item marked as active");
+    } catch (error) {
+      toast.error(error.message || "Failed to reactivate item");
+    } finally {
+      setIsUnresolving(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-3xl">
@@ -237,8 +262,20 @@ const ViewDetails = () => {
             <div>
               {isOwner ? (
                 isResolved ? (
-                  <div className="mt-4 w-full rounded-xl bg-emerald-50 px-5 py-3 text-center text-sm font-semibold text-emerald-700">
-                    Item resolved
+                  <div className="mt-4 flex flex-col gap-2">
+                    <div className="w-full rounded-xl bg-emerald-50 px-5 py-3 text-center text-sm font-semibold text-emerald-700">
+                      Item resolved
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleUnresolveItem}
+                      disabled={isUnresolving}
+                      className="w-full rounded-xl border border-zinc-200 px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                    >
+                      {isUnresolving
+                        ? "Reactivating..."
+                        : "Mark as active"}
+                    </button>
                   </div>
                 ) : (
                   <button
