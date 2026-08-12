@@ -29,11 +29,13 @@ const Signin = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("https://find-it-server-ivory.vercel.app/login", {
-        email: data.email,
-        password: data.password,
-      });
-      console.log(response.data);
+      const response = await axios.post(
+        "https://find-it-server-ivory.vercel.app/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+      );
       // Save JWT
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.user.id);
@@ -177,7 +179,8 @@ const Signin = () => {
           <button
             type="button"
             onClick={() => {
-              window.location.href = "https://find-it-server-ivory.vercel.app/auth/google";
+              window.location.href =
+                "https://find-it-server-ivory.vercel.app/auth/google";
             }}
             className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-300 bg-white py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] cursor-pointer"
           >
