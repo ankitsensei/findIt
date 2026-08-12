@@ -68,6 +68,53 @@ const getFoundItems = async (req, res) => {
   }
 };
 
+const getMyFoundItems = async (req, res) => {
+  const { page = 1, search } = req.query;
+  const limit = 20;
+  const offset = (page - 1) * limit;
+  const userId = req.user.id;
+
+  try {
+    if (search) {
+      const searchPattern = `%${search}%`;
+      const countResult = await pool.query(
+        `SELECT COUNT(*) FROM founditems WHERE (name ILIKE $1 OR description ILIKE $1) AND user_id=$2`,
+        [searchPattern, userId],
+      );
+      const totalItems = Number(countResult.rows[0].count);
+      const results = await pool.query(
+        `SELECT * FROM founditems WHERE (name ILIKE $1 OR description ILIKE $1) AND user_id=$2 ORDER BY created_at DESC LIMIT $3 OFFSET $4`,
+        [searchPattern, userId, limit, offset],
+      );
+      return res.status(200).json({
+        items: results.rows,
+        totalItems,
+        currentPage: Number(page),
+        totalPages: Math.ceil(totalItems / limit),
+      });
+    }
+
+    const countResult = await pool.query(
+      `SELECT COUNT(*) FROM founditems WHERE user_id=$1`,
+      [userId],
+    );
+    const totalItems = Number(countResult.rows[0].count);
+    const results = await pool.query(
+      "SELECT * FROM founditems WHERE user_id=$1 ORDER BY created_at DESC LIMIT $2 OFFSET $3",
+      [userId, limit, offset],
+    );
+    res.status(200).json({
+      items: results.rows,
+      totalItems,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalItems / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 const getFoundItemById = async (req, res) => {
   const id = req.params.id;
   try {
@@ -185,6 +232,7 @@ const deleteFoundItem = async (req, res) => {
 
 export {
   getFoundItems,
+  getMyFoundItems,
   getFoundItemById,
   createFoundItem,
   updateFoundItem,

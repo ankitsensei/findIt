@@ -8,25 +8,23 @@ const MyFounds = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const fetchFoundData = async () => {
     try {
       const res = await fetch(
-        `https://find-it-server-ivory.vercel.app/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
+        `https://find-it-server-ivory.vercel.app/my/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Failed to load items");
-      const myItems = (json.items ?? []).filter(
-        (item) => String(item.user_id) === String(userId),
-      );
-      setFoundData(myItems);
+      setFoundData(json.items ?? []);
       setTotalPages(json.totalPages ?? 0);
       setFoundDataLoaded(true);
     } catch (error) {
@@ -133,10 +131,17 @@ const MyFounds = () => {
                       alt={item.name}
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                     />
-                    <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-emerald-700 backdrop-blur">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      Found
-                    </span>
+                    {item.status === "resolved" ? (
+                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-white backdrop-blur">
+                        <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                        Resolved
+                      </span>
+                    ) : (
+                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-emerald-700 backdrop-blur">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        Found
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-1 flex-col p-3 md:p-4">

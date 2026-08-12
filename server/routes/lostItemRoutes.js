@@ -69,11 +69,11 @@ const getLostItems = async (req, res) => {
   }
 };
 
-const getFoundItems = async (req, res) => {
+const getMyLostItems = async (req, res) => {
   const { page = 1, search } = req.query;
   const limit = 20;
   const offset = (page - 1) * limit;
-  const userId = req.headers.userid;
+  const userId = req.user.id;
 
   try {
     if (search) {
@@ -250,7 +250,7 @@ const deleteLostItem = async (req, res) => {
 
 export {
   getLostItems,
-  getFoundItems,
+  getMyLostItems,
   getLostItemById,
   createLostItem,
   updateLostItem,

@@ -39,6 +39,7 @@ app.delete("/deleteuser/:id", auth, userRoutes.deleteUser);
 
 // Lost Items routing
 app.get("/lostItems", lostItemRoutes.getLostItems);
+app.get("/my/lostItems", auth, lostItemRoutes.getMyLostItems);
 app.get("/lostItems/:id", lostItemRoutes.getLostItemById);
 app.post(
   "/lostItems",
@@ -53,6 +54,7 @@ app.delete("/lostItems/:id", auth, lostItemRoutes.deleteLostItem);
 
 // Found Items routing
 app.get("/foundItems", foundItemRoutes.getFoundItems);
+app.get("/my/foundItems", auth, foundItemRoutes.getMyFoundItems);
 app.get("/foundItems/:id", foundItemRoutes.getFoundItemById);
 app.post(
   "/foundItems",
