@@ -49,13 +49,16 @@ const CreateFoundItem = () => {
 
     setSubmitLoading(true);
     try {
-      const response = await fetch(`https://find-it-server-ivory.vercel.app/foundItems`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `https://find-it-server-ivory.vercel.app/foundItems`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
         },
-        body: formData,
-      });
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -63,7 +66,6 @@ const CreateFoundItem = () => {
         return;
       }
       reset();
-      console.log(await response.json());
     } catch (error) {
       console.error(error);
     } finally {
@@ -184,7 +186,8 @@ const CreateFoundItem = () => {
                   {...register("latitude", {
                     required: "Please pin the location on the map",
                     validate: (v) =>
-                      typeof v === "number" || "Please pin the location on the map",
+                      typeof v === "number" ||
+                      "Please pin the location on the map",
                   })}
                 />
                 <input type="hidden" {...register("longitude")} />

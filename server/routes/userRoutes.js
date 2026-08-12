@@ -103,7 +103,6 @@ const getMe = async (req, res) => {
 
 const getUser = async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
   try {
     const result = await pool.query(
       `SELECT id, username, email FROM users WHERE id=$1`,
