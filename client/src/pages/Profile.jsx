@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../config";
+import { setStoredUser } from "../userSession";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
@@ -48,11 +49,14 @@ const Profile = () => {
       if (!response.ok) {
         toast.error("Session expired. Please sign in again.");
         localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        setStoredUser(null);
         navigate("/signin");
         return;
       }
       const user = await response.json();
       setUserData(user);
+      setStoredUser(user);
 
       try {
         const statsResponse = await fetch(
@@ -103,6 +107,8 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setStoredUser(null);
     toast.success("Logged out successfully");
     navigate("/signin");
   };
@@ -174,6 +180,7 @@ const Profile = () => {
         return;
       }
       setUserData(updatedUser);
+      setStoredUser(updatedUser);
       setOpenEditWindow(false);
       toast.success("Username updated successfully");
     } catch (error) {
@@ -216,6 +223,7 @@ const Profile = () => {
       }
 
       setUserData(updatedUser);
+      setStoredUser(updatedUser);
       toast.success("Profile picture updated");
     } catch (error) {
       toast.error(error.message || "Failed to update profile picture");

@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "./config";
+import { setStoredUser } from "./userSession";
 
 const OAuthSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -18,8 +20,25 @@ const OAuthSuccess = () => {
 
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
-    toast.success("Signed in with Google successfully!");
-    navigate("/");
+    setStoredUser({ id: userId });
+
+    const loadUser = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+          setStoredUser(await response.json());
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      toast.success("Signed in with Google successfully!");
+      navigate("/");
+    };
+
+    loadUser();
   }, [navigate, searchParams]);
 
   return (

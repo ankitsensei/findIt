@@ -6,6 +6,7 @@ import Logo from "../assets/logo.jpeg";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../config";
+import { setStoredUser } from "../userSession";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +38,7 @@ const Signin = () => {
       // Save JWT
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.user.id);
+      setStoredUser(response.data.user);
       toast.success("Login Successful!");
       setTimeout(() => {
         navigate("/");

@@ -1,14 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, User, ChevronDown, LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import Logo from "../assets/logo.jpeg";
+import { API_BASE_URL } from "../config";
+import {
+  getStoredUser,
+  setStoredUser,
+  USER_UPDATED_EVENT,
+} from "../userSession";
+
+const getInitials = (name) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [user, setUser] = useState(getStoredUser);
   const isAuthenticated = Boolean(localStorage.getItem("token"));
+
+  useEffect(() => {
+    const syncUser = () => setUser(getStoredUser());
+
+    window.addEventListener(USER_UPDATED_EVENT, syncUser);
+    window.addEventListener("storage", syncUser);
+
+    return () => {
+      window.removeEventListener(USER_UPDATED_EVENT, syncUser);
+      window.removeEventListener("storage", syncUser);
+    };
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    let cancelled = false;
+
+    const loadUser = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) return;
+
+        const currentUser = await response.json();
+        if (!cancelled) setStoredUser(currentUser);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadUser();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const linkClass = ({ isActive }) =>
     `relative rounded-md px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
@@ -25,7 +78,9 @@ const Navbar = () => {
     }`;
 
   const handleLogout = () => {
-    localStorage.setItem("token", "");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setStoredUser(null);
     toast.success("Logged out successfully");
     setMenuOpen(false);
     setUserMenuOpen(false);
@@ -75,8 +130,18 @@ const Navbar = () => {
                   onClick={() => setUserMenuOpen((o) => !o)}
                   className="flex items-center gap-1.5 rounded-full p-1 pr-2.5 transition-colors hover:bg-zinc-100 cursor-pointer"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white">
-                    <User size={16} strokeWidth={2} />
+                  <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-zinc-900 text-xs font-semibold text-white">
+                    {user?.profile_pic_url ? (
+                      <img
+                        src={user.profile_pic_url}
+                        alt={`${user.username || "User"} profile`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : user?.username ? (
+                      getInitials(user.username)
+                    ) : (
+                      <User size={16} strokeWidth={2} />
+                    )}
                   </span>
                   <ChevronDown
                     size={14}
