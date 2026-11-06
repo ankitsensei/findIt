@@ -18,6 +18,7 @@ import {
   Check,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../config";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
@@ -38,7 +39,7 @@ const Profile = () => {
 
   const handleUserProfile = async () => {
     try {
-      const response = await fetch(`https://find-it-server-ivory.vercel.app/me`, {
+      const response = await fetch(`${API_BASE_URL}/me`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -53,7 +54,7 @@ const Profile = () => {
 
       try {
         const statsResponse = await fetch(
-          `https://find-it-server-ivory.vercel.app/me/stats`,
+          `${API_BASE_URL}/me/stats`,
           {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
@@ -69,7 +70,7 @@ const Profile = () => {
 
       try {
         const resolvedResponse = await fetch(
-          `https://find-it-server-ivory.vercel.app/me/resolvedItems`,
+          `${API_BASE_URL}/me/resolvedItems`,
           {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
@@ -155,7 +156,7 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        `https://find-it-server-ivory.vercel.app/updateuser/${userData.id}`,
+        `${API_BASE_URL}/updateuser/${userData.id}`,
         {
           method: "PUT",
           headers: {
@@ -182,7 +183,7 @@ const Profile = () => {
     setUnresolvingId(item.id);
     try {
       const response = await fetch(
-        `https://find-it-server-ivory.vercel.app/${item.type}Items/${item.id}/unresolve`,
+        `${API_BASE_URL}/${item.type}Items/${item.id}/unresolve`,
         {
           method: "PATCH",
           headers: {

@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Logo from "../assets/logo.jpeg";
 import { ShieldCheck } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 const VerifyEmail = () => {
   const [otp, setOtp] = useState("");
@@ -24,7 +25,7 @@ const VerifyEmail = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axios.post("https://find-it-server-ivory.vercel.app/verify-email", {
+      const response = await axios.post(`${API_BASE_URL}/verify-email`, {
         userId,
         otp,
       });
@@ -42,7 +43,7 @@ const VerifyEmail = () => {
   const handleResend = async () => {
     setIsResending(true);
     try {
-      const response = await axios.post("https://find-it-server-ivory.vercel.app/resend-otp", {
+      const response = await axios.post(`${API_BASE_URL}/resend-otp`, {
         userId,
       });
 

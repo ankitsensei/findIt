@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Logo from "../assets/logo.jpeg";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../config";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,13 +30,10 @@ const Signin = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "https://find-it-server-ivory.vercel.app/login",
-        {
-          email: data.email,
-          password: data.password,
-        },
-      );
+      const response = await axios.post(`${API_BASE_URL}/login`, {
+        email: data.email,
+        password: data.password,
+      });
       // Save JWT
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.user.id);
@@ -179,8 +177,7 @@ const Signin = () => {
           <button
             type="button"
             onClick={() => {
-              window.location.href =
-                "https://find-it-server-ivory.vercel.app/auth/google";
+              window.location.href = `${API_BASE_URL}/auth/google`;
             }}
             className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-300 bg-white py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] cursor-pointer"
           >

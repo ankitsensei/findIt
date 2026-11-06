@@ -1,3 +1,4 @@
+import "./utils/dnsFallback.js";
 import express from "express";
 import passport from "passport";
 import "./config/passport.js";
@@ -11,10 +12,12 @@ import upload from "./middleware/upload.js";
 
 const app = express();
 const PORT = 3000;
+app.set("trust proxy", 1);
 app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 app.get("/", (req, res) => {
   res.send("Hello World");

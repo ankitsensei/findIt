@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { Package, Image, Upload } from "lucide-react";
 import LocationPicker from "../components/LocationPicker";
+import { API_BASE_URL } from "../config";
 
 const CreateLostItem = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -50,7 +51,7 @@ const CreateLostItem = () => {
     setSubmitLoading(true);
     try {
       const response = await fetch(
-        `https://find-it-server-ivory.vercel.app/lostitems`,
+        `${API_BASE_URL}/lostitems`,
         {
           method: "POST",
           headers: {

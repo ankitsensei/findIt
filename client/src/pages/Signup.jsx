@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Logo from "../assets/logo.jpeg";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../config";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,14 +29,11 @@ const Signup = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "https://find-it-server-ivory.vercel.app/createuser",
-        {
-          username: data.username,
-          email: data.email,
-          password: data.password,
-        },
-      );
+      const response = await axios.post(`${API_BASE_URL}/createuser`, {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
 
       toast.success("Account created! Please verify your email.");
 
@@ -271,8 +269,7 @@ const Signup = () => {
           <button
             type="button"
             onClick={() => {
-              window.location.href =
-                "https://find-it-server-ivory.vercel.app/auth/google";
+              window.location.href = `${API_BASE_URL}/auth/google`;
             }}
             className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-300 bg-white py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] cursor-pointer"
           >

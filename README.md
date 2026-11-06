@@ -128,6 +128,7 @@ EMAIL_PASSWORD=your_app_password
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
+CLIENT_URL=http://localhost:5173
 ```
 
 > Note: the `status` column is used to track active vs resolved listings on both the
@@ -147,10 +148,13 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-The frontend currently calls the deployed backend directly
-(`https://find-it-server-ivory.vercel.app`). To point it at your local server, replace
-that URL in `client/src/` (pages under `src/pages/` and `src/components/ViewDetails.jsx`)
-with `http://localhost:3000`.
+The frontend calls the deployed backend directly
+(`https://find-it-server-ivory.vercel.app`) in production and `http://localhost:3000`
+in development. To override the API URL, create `client/.env` with:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
 
 ---
 
@@ -218,6 +222,8 @@ All protected endpoints expect an `Authorization: Bearer <token>` header.
 | `GOOGLE_CLIENT_ID`      | Google OAuth client ID       |
 | `GOOGLE_CLIENT_SECRET`  | Google OAuth client secret   |
 | `GOOGLE_CALLBACK_URL`   | Google OAuth redirect URI    |
+| `CLIENT_URL`            | Frontend URL for OAuth redirects (localhost in dev, production otherwise) |
+| `DNS_FALLBACK`          | Optional; set `false` to disable public-DNS retry when the OS resolver fails (development only) |
 
 ---
 

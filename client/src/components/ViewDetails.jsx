@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { MapPin, Clock, ArrowLeft, User } from "lucide-react";
 import toast from "react-hot-toast";
 import MapView from "./MapView";
+import { API_BASE_URL } from "../config";
 
 const ViewDetails = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const ViewDetails = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await fetch(`https://find-it-server-ivory.vercel.app/${type}Items/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/${type}Items/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +48,7 @@ const ViewDetails = () => {
     if (!item) return;
     const fetchUser = async () => {
       try {
-        const res = await fetch(`https://find-it-server-ivory.vercel.app/users/${item.user_id}`);
+        const res = await fetch(`${API_BASE_URL}/users/${item.user_id}`);
         const json = await res.json();
         setUser(json);
       } catch (error) {
@@ -87,7 +88,7 @@ const ViewDetails = () => {
 
     setIsSending(true);
     try {
-      const response = await fetch(`https://find-it-server-ivory.vercel.app/contact-owner`, {
+      const response = await fetch(`${API_BASE_URL}/contact-owner`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,7 +130,7 @@ const ViewDetails = () => {
     setIsResolving(true);
     try {
       const res = await fetch(
-        `https://find-it-server-ivory.vercel.app/${type}Items/${id}/resolve`,
+        `${API_BASE_URL}/${type}Items/${id}/resolve`,
         {
           method: "PATCH",
           headers: {
@@ -153,7 +154,7 @@ const ViewDetails = () => {
     setIsUnresolving(true);
     try {
       const res = await fetch(
-        `https://find-it-server-ivory.vercel.app/${type}Items/${id}/unresolve`,
+        `${API_BASE_URL}/${type}Items/${id}/unresolve`,
         {
           method: "PATCH",
           headers: {

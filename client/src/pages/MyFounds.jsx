@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { MapPin, Clock, Search, Plus } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 const MyFounds = () => {
   const [foundData, setFoundData] = useState([]);
@@ -13,7 +14,7 @@ const MyFounds = () => {
   const fetchFoundData = async () => {
     try {
       const res = await fetch(
-        `https://find-it-server-ivory.vercel.app/my/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
+        `${API_BASE_URL}/my/foundItems?page=${page}&search=${encodeURIComponent(search)}`,
         {
           method: "GET",
           headers: {
