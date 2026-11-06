@@ -9,7 +9,7 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
-import hero from "../assets/hero.jpeg";
+import hero from "../assets/hero-transparent.png";
 
 const features = [
   {
@@ -102,12 +102,12 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="absolute -inset-4 rounded-3xl bg-zinc-200/60 blur-2xl" />
+          <div className="relative flex items-center justify-center lg:justify-end">
+            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-zinc-200/80 via-zinc-100/50 to-transparent blur-3xl" />
             <img
               src={hero}
               alt="Lost and found illustration"
-              className="relative w-full max-w-md lg:max-w-none rounded-3xl border border-zinc-200 object-cover shadow-xl"
+              className="relative z-10 w-full max-w-[35rem] drop-shadow-[0_24px_40px_rgba(24,24,27,0.16)]"
             />
           </div>
         </section>
