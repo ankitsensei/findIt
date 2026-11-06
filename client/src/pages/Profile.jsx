@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router";
 import {
   User,
@@ -13,9 +13,9 @@ import {
   Pencil,
   RotateCcw,
   FileText,
-  Box,
   X,
   Check,
+  Camera,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../config";
@@ -36,6 +36,8 @@ const Profile = () => {
   const [openEditWindow, setOpenEditWindow] = useState(false);
   const [usernameDraft, setUsernameDraft] = useState("");
   const [usernameError, setUsernameError] = useState("");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleUserProfile = async () => {
     try {
@@ -179,6 +181,49 @@ const Profile = () => {
     }
   };
 
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be smaller than 5 MB");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploadingAvatar(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/me/profile-pic`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const updatedUser = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          updatedUser.message || "Failed to update profile picture",
+        );
+      }
+
+      setUserData(updatedUser);
+      toast.success("Profile picture updated");
+    } catch (error) {
+      toast.error(error.message || "Failed to update profile picture");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const handleUnresolve = async (item) => {
     setUnresolvingId(item.id);
     try {
@@ -262,8 +307,18 @@ const Profile = () => {
 
                 <div className="flex flex-col gap-5 px-6 py-5">
                   <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-white text-lg font-semibold tracking-tight">
-                      {getInitials(usernameDraft.trim() || userData?.username)}
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-zinc-900 text-lg font-semibold tracking-tight text-white">
+                      {userData?.profile_pic_url ? (
+                        <img
+                          src={userData.profile_pic_url}
+                          alt={`${userData.username || "User"} profile`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        getInitials(
+                          usernameDraft.trim() || userData?.username,
+                        )
+                      )}
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-zinc-900">
@@ -340,10 +395,51 @@ const Profile = () => {
             </div>
           )}
 
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleAvatarChange}
+          />
+
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 text-white text-2xl font-semibold tracking-tight">
-                {getInitials(userData?.username)}
+              <div className="flex shrink-0 flex-col items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingAvatar}
+                  aria-label="Change profile picture"
+                  className="group relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-zinc-900 text-2xl font-semibold tracking-tight text-white ring-1 ring-zinc-200 transition hover:ring-zinc-300 disabled:cursor-wait"
+                >
+                  {userData?.profile_pic_url ? (
+                    <img
+                      src={userData.profile_pic_url}
+                      alt={`${userData.username || "User"} profile`}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    getInitials(userData?.username)
+                  )}
+                  {uploadingAvatar ? (
+                    <span className="absolute inset-0 flex items-center justify-center bg-zinc-950/60">
+                      <Loader2 size={20} className="animate-spin text-white" />
+                    </span>
+                  ) : (
+                    <span className="absolute inset-0 flex items-center justify-center bg-zinc-950/50 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                      <Camera size={18} strokeWidth={2} />
+                    </span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingAvatar}
+                  className="text-xs font-medium text-zinc-500 transition hover:text-zinc-900 disabled:cursor-wait disabled:opacity-60"
+                >
+                  {uploadingAvatar ? "Uploading..." : "Change photo"}
+                </button>
               </div>
 
               <div className="flex flex-1 flex-col items-center sm:items-start gap-1.5 text-center sm:text-left">

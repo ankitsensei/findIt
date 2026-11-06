@@ -176,6 +176,7 @@ Base URL: `https://find-it-server-ivory.vercel.app`
 | GET    | `/users/:id`            | -    | Get a user                      |
 | GET    | `/me`                   | Yes  | Get the current user            |
 | GET    | `/me/stats`             | Yes  | Profile stats (posted/returned) |
+| POST   | `/me/profile-pic`       | Yes  | Update profile picture          |
 | PUT    | `/updateuser/:id`       | Yes  | Update username/email/password  |
 | DELETE | `/deleteuser/:id`       | Yes  | Delete a user                   |
 | POST   | `/contact-owner`        | Yes  | Email the owner of an item      |

@@ -1,5 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
+import { v2 as cloudinary } from "cloudinary";
+import streamifier from "streamifier";
 import generateOTP from "../utils/generateOTP.js";
 import transporter from "../config/mailer.js";
 import jwt from "jsonwebtoken";
@@ -8,6 +10,25 @@ const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
+
+const uploadImage = (buffer, folder, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, ...options },
+      (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      },
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -59,6 +80,7 @@ const login = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
+        profile_pic_url: user.profile_pic_url,
       },
     });
   } catch (error) {
@@ -74,7 +96,7 @@ const login = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const results = await pool.query(
-      `SELECT id, username, email, created_at FROM users`,
+      `SELECT id, username, email, profile_pic_url, created_at FROM users`,
     );
     return res.status(200).json(results.rows);
   } catch (error) {
@@ -88,7 +110,7 @@ const getMe = async (req, res) => {
   const userId = req.user.id;
   try {
     const results = await pool.query(
-      `SELECT id, username, email, created_at FROM users WHERE id=$1`,
+      `SELECT id, username, email, profile_pic_url, created_at FROM users WHERE id=$1`,
       [userId],
     );
     if (results.rowCount === 0) {
@@ -105,7 +127,7 @@ const getUser = async (req, res) => {
   const userId = req.params.id;
   try {
     const result = await pool.query(
-      `SELECT id, username, email FROM users WHERE id=$1`,
+      `SELECT id, username, email, profile_pic_url FROM users WHERE id=$1`,
       [userId],
     );
     if (result.rowCount === 0) {
@@ -150,7 +172,7 @@ const createUser = async (req, res) => {
 
     // 4. Create User
     const results = await pool.query(
-      `INSERT INTO users (username, email, password) VALUES($1, $2, $3) RETURNING id, username, email, created_at`,
+      `INSERT INTO users (username, email, password) VALUES($1, $2, $3) RETURNING id, username, email, profile_pic_url, created_at`,
       [username, email, hashedPassword],
     );
     const user = results.rows[0];
@@ -444,6 +466,65 @@ const getResolvedItems = async (req, res) => {
   }
 };
 
+// Update the current user's profile picture
+const updateProfilePic = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Image file is required." });
+  }
+
+  if (!req.file.mimetype?.startsWith("image/")) {
+    return res.status(400).json({ message: "Only image files are allowed." });
+  }
+
+  if (req.file.size > 5 * 1024 * 1024) {
+    return res.status(400).json({ message: "Image must be smaller than 5 MB." });
+  }
+
+  let uploadedImage;
+
+  try {
+    const currentUser = await pool.query(
+      `SELECT profile_pic_public_id FROM users WHERE id = $1`,
+      [req.user.id],
+    );
+
+    if (currentUser.rowCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    uploadedImage = await uploadImage(req.file.buffer, "findit/avatars", {
+      transformation: [
+        { width: 400, height: 400, crop: "fill", gravity: "auto" },
+      ],
+    });
+
+    const result = await pool.query(
+      `UPDATE users
+       SET profile_pic_url = $1, profile_pic_public_id = $2
+       WHERE id = $3
+       RETURNING id, username, email, profile_pic_url, created_at`,
+      [uploadedImage.secure_url, uploadedImage.public_id, req.user.id],
+    );
+
+    const oldPublicId = currentUser.rows[0].profile_pic_public_id;
+    if (oldPublicId && oldPublicId !== uploadedImage.public_id) {
+      await cloudinary.uploader.destroy(oldPublicId).catch((error) => {
+        console.error("Failed to delete old profile picture:", error);
+      });
+    }
+
+    return res.status(200).json(result.rows[0]);
+  } catch (error) {
+    if (uploadedImage?.public_id) {
+      await cloudinary.uploader.destroy(uploadedImage.public_id).catch(() => {});
+    }
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Failed to update profile picture" });
+  }
+};
+
 // Update users
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -477,7 +558,7 @@ const updateUser = async (req, res) => {
     values.push(id);
     const results = await pool.query(
       `UPDATE users SET ${updates.join(", ")} WHERE id=$${values.length}
-       RETURNING id, username, email, created_at`,
+       RETURNING id, username, email, profile_pic_url, created_at`,
       values,
     );
     if (results.rowCount === 0) {
@@ -512,6 +593,7 @@ export {
   resendOtp,
   contactOwner,
   updateUser,
+  updateProfilePic,
   deleteUser,
   getUserStats,
   getResolvedItems,

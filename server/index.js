@@ -34,6 +34,12 @@ app.get("/users/:id", userRoutes.getUser);
 app.get("/me", auth, userRoutes.getMe);
 app.get("/me/stats", auth, userRoutes.getUserStats);
 app.get("/me/resolvedItems", auth, userRoutes.getResolvedItems);
+app.post(
+  "/me/profile-pic",
+  auth,
+  upload.single("image"),
+  userRoutes.updateProfilePic,
+);
 app.post("/createuser", userRoutes.createUser);
 app.post("/verify-email", userRoutes.verifyEmail);
 app.post("/resend-otp", userRoutes.resendOtp);
