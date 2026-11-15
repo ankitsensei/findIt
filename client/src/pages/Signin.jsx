@@ -49,38 +49,34 @@ const Signin = () => {
   };
 
   const inputClass = (hasError) =>
-    `w-full rounded-xl border py-2.5 pl-11 pr-10 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:ring-2 ${
-      hasError
-        ? "border-red-400 bg-red-50/30 focus:border-red-400 focus:ring-red-100"
-        : "border-zinc-300 bg-white focus:border-zinc-900 focus:ring-zinc-200"
-    }`;
+    `field pl-11 pr-10 ${hasError ? "field-error" : ""}`;
 
   return (
-    <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-zinc-50 px-4 py-12">
+    <div className="min-h-[calc(100vh-52px)] flex items-center justify-center bg-canvas px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <NavLink to="/" className="inline-flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl">
               <img src={Logo} alt="logo" className="rounded-md" />
             </span>
-            <span className="text-xl font-bold tracking-tight text-zinc-900">
+            <span className="font-display text-lg font-medium text-ink">
               findIt
             </span>
           </NavLink>
-          <h2 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-950">
+          <h2 className="mt-6 font-display text-[28px] font-normal tracking-[-0.02em] text-ink">
             Welcome back
           </h2>
-          <p className="mt-1.5 text-sm text-zinc-500">
+          <p className="mt-1.5 text-sm text-secondary">
             Sign in to your account to continue.
           </p>
         </div>
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm md:p-8">
+        <div className="card p-6 md:p-8">
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="flex flex-col gap-4">
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
+                  className="label"
                 >
                   Email address
                 </label>
@@ -88,7 +84,7 @@ const Signin = () => {
                   <Mail
                     size={16}
                     strokeWidth={2}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
                   />
                   <input
                     id="email"
@@ -115,13 +111,13 @@ const Signin = () => {
                 <div className="mb-1.5 flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-zinc-700"
+                    className="label mb-0"
                   >
                     Password
                   </label>
                   <button
                     type="button"
-                    className="text-xs font-medium text-zinc-500 transition hover:text-zinc-800 cursor-pointer"
+                    className="text-xs font-medium text-body transition hover:text-ink cursor-pointer"
                   >
                     Forgot password?
                   </button>
@@ -130,7 +126,7 @@ const Signin = () => {
                   <Lock
                     size={16}
                     strokeWidth={2}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
                   />
                   <input
                     id="password"
@@ -147,7 +143,7 @@ const Signin = () => {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 transition hover:text-zinc-600 cursor-pointer"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted transition hover:text-body cursor-pointer"
                   >
                     {showPassword ? (
                       <EyeOff size={16} strokeWidth={2} />
@@ -165,23 +161,23 @@ const Signin = () => {
 
               <button
                 type="submit"
-                className="mt-2 w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+                className="btn-primary mt-2 w-full"
               >
                 Sign in
               </button>
             </div>
           </form>
           <div className="my-5 flex items-center gap-3">
-            <span className="h-px flex-1 bg-zinc-200" />
-            <span className="text-xs text-zinc-400">or</span>
-            <span className="h-px flex-1 bg-zinc-200" />
+            <span className="h-px flex-1 bg-edge" />
+            <span className="text-xs text-muted">or</span>
+            <span className="h-px flex-1 bg-edge" />
           </div>
           <button
             type="button"
             onClick={() => {
               window.location.href = `${API_BASE_URL}/auth/google`;
             }}
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-300 bg-white py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] cursor-pointer"
+            className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-edge bg-card py-3 text-sm font-medium text-ink transition hover:bg-soft-surface cursor-pointer"
           >
             <svg width="18" height="18" viewBox="0 0 48 48">
               <path
@@ -204,11 +200,11 @@ const Signin = () => {
             Continue with Google
           </button>
         </div>
-        <p className="mt-6 text-center text-sm text-zinc-500">
+        <p className="mt-6 text-center text-sm text-body">
           Don't have an account?{" "}
           <NavLink
             to="/signup"
-            className="font-semibold text-zinc-950 underline underline-offset-4 transition hover:text-zinc-600"
+            className="link-blue font-medium"
           >
             Sign up
           </NavLink>

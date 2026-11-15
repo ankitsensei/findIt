@@ -75,35 +75,31 @@ const CreateLostItem = () => {
   };
 
   const inputClass = (hasError) =>
-    `w-full rounded-xl border py-2.5 pl-11 pr-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:ring-2 ${
-      hasError
-        ? "border-red-400 bg-red-50/30 focus:border-red-400 focus:ring-red-100"
-        : "border-zinc-300 bg-white focus:border-zinc-900 focus:ring-zinc-200"
-    }`;
+    `field pl-11 pr-3.5 ${hasError ? "field-error" : ""}`;
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
+    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+          <div className="tag">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
             Lost item
           </div>
-          <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="mt-3 type-heading">
             Report what you lost
           </h1>
-          <p className="mt-2 text-sm md:text-base text-zinc-500">
+          <p className="mt-2 text-sm text-secondary">
             Describe what you lost and where, so others can help you find it.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 md:p-8 shadow-sm">
+        <div className="card p-6 md:p-8">
           <form onSubmit={handleSubmit(handleCreateLostItemSubmit)} noValidate>
             <div className="flex flex-col gap-5">
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
+                  className="label"
                 >
                   Item name
                 </label>
@@ -111,7 +107,7 @@ const CreateLostItem = () => {
                   <Package
                     size={16}
                     strokeWidth={2}
-                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
                   />
                   <input
                     id="name"
@@ -133,7 +129,7 @@ const CreateLostItem = () => {
               <div>
                 <label
                   htmlFor="description"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
+                  className="label"
                 >
                   Description
                 </label>
@@ -158,7 +154,7 @@ const CreateLostItem = () => {
               <div>
                 <label
                   htmlFor="location"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
+                  className="label"
                 >
                   Location
                 </label>
@@ -202,18 +198,18 @@ const CreateLostItem = () => {
               <div>
                 <label
                   htmlFor="image"
-                  className="mb-1.5 block text-sm font-medium text-zinc-700"
+                  className="label"
                 >
                   Image
                 </label>
                 <label
                   htmlFor="image"
-                  className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 transition hover:border-zinc-900"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-pale-ink bg-soft-surface px-4 py-5 transition hover:border-blue"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-card text-blue">
                     <Image size={18} strokeWidth={1.8} />
                   </span>
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-body">
                     {imagePreview
                       ? imageFile[0].name
                       : "Click to upload a photo of the item"}
@@ -221,7 +217,7 @@ const CreateLostItem = () => {
                   <Upload
                     size={16}
                     strokeWidth={1.8}
-                    className="ml-auto shrink-0 text-zinc-400"
+                    className="ml-auto shrink-0 text-muted"
                   />
                 </label>
                 <input
@@ -235,29 +231,29 @@ const CreateLostItem = () => {
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="mt-4 h-64 w-full rounded-xl border object-cover"
+                    className="mt-4 h-64 w-full rounded-lg border border-edge object-cover"
                   />
                 )}
               </div>
 
-              <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 pt-5 mt-2">
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-edge pt-5 mt-2">
                 <NavLink
                   to="/lostit"
-                  className="rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 hover:border-zinc-300"
+                  className="btn-secondary"
                 >
                   Cancel
                 </NavLink>
                 {submitLoading ? (
                   <button
                     type="submit"
-                    className="w-full sm:w-auto rounded-xl bg-zinc-600 px-6 py-2.5 text-sm font-semibold text-white transition active:scale-[0.99] cursor-wait"
+                    className="btn-primary w-full sm:w-auto opacity-70 cursor-wait"
                   >
                     Submitting...
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="w-full sm:w-auto rounded-xl bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 active:scale-[0.99] cursor-pointer"
+                    className="btn-primary w-full sm:w-auto"
                   >
                     Submit item
                   </button>

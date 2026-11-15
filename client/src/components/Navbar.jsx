@@ -64,17 +64,17 @@ const Navbar = () => {
   }, []);
 
   const linkClass = ({ isActive }) =>
-    `relative rounded-md px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+    `rounded-md px-3 py-1.5 text-sm transition-colors duration-150 cursor-pointer ${
       isActive
-        ? "bg-zinc-900 text-white shadow-sm"
-        : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        ? "bg-card text-ink shadow-card ring-1 ring-edge"
+        : "text-body hover:text-ink"
     }`;
 
   const mobileLinkClass = ({ isActive }) =>
-    `block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+    `block rounded-lg px-4 py-2.5 text-sm transition-colors cursor-pointer ${
       isActive
-        ? "bg-zinc-900 text-white"
-        : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        ? "bg-card text-ink ring-1 ring-edge"
+        : "text-body hover:bg-soft-surface hover:text-ink"
     }`;
 
   const handleLogout = () => {
@@ -88,17 +88,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-200/80 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-edge bg-canvas/80 backdrop-blur-md">
+      <div className="mx-auto flex h-[52px] max-w-[1024px] items-center justify-between gap-4 px-4 sm:px-10">
         <NavLink to="/" className="flex shrink-0 items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg ring-1 ring-zinc-200">
+          <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md ring-1 ring-edge">
             <img
               src={Logo}
               alt="findIt logo"
               className="h-full w-full object-cover"
             />
           </span>
-          <span className="text-lg font-bold tracking-tight text-zinc-900">
+          <span className="font-display text-lg font-medium tracking-[-0.01em] text-ink">
             findIt
           </span>
         </NavLink>
@@ -121,16 +121,16 @@ const Navbar = () => {
             <NavLink to="/myfounds" className={linkClass}>
               Found by Me
             </NavLink>
-            <span className="mx-1 h-5 w-px bg-zinc-200" />
+            <span className="mx-1.5 h-5 w-px bg-edge" />
           </div>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="hidden items-center gap-1.5 sm:flex">
             {isAuthenticated ? (
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen((o) => !o)}
-                  className="flex items-center gap-1.5 rounded-full p-1 pr-2.5 transition-colors hover:bg-zinc-100 cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-full p-1 pr-2.5 transition-colors hover:bg-soft-surface cursor-pointer"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-zinc-900 text-xs font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-ink text-xs font-medium text-canvas">
                     {user?.profile_pic_url ? (
                       <img
                         src={user.profile_pic_url}
@@ -146,7 +146,7 @@ const Navbar = () => {
                   <ChevronDown
                     size={14}
                     strokeWidth={2}
-                    className={`text-zinc-500 transition-transform duration-200 ${
+                    className={`text-muted transition-transform duration-200 ${
                       userMenuOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -158,14 +158,14 @@ const Navbar = () => {
                       className="fixed inset-0 z-10"
                       onClick={() => setUserMenuOpen(false)}
                     />
-                    <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg shadow-zinc-900/5">
+                    <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-card border border-edge bg-card p-1.5 shadow-card">
                       <button
                         onClick={() => {
                           setUserMenuOpen(false);
                           setMenuOpen(false);
                           navigate("/profile");
                         }}
-                        className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900 cursor-pointer"
+                        className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-body transition-colors hover:bg-soft-surface hover:text-ink cursor-pointer"
                       >
                         Profile
                       </button>
@@ -184,14 +184,11 @@ const Navbar = () => {
               <>
                 <NavLink
                   to="/signin"
-                  className="rounded-md px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                  className="rounded-md px-3 py-1.5 text-sm text-body transition-colors hover:text-ink cursor-pointer"
                 >
                   Log in
                 </NavLink>
-                <NavLink
-                  to="/signup"
-                  className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 active:scale-[0.98]"
-                >
+                <NavLink to="/signup" className="btn-primary btn-nav">
                   Sign up
                 </NavLink>
               </>
@@ -202,7 +199,7 @@ const Navbar = () => {
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-700 transition-colors hover:bg-zinc-100 lg:hidden cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-body transition-colors hover:bg-soft-surface hover:text-ink lg:hidden cursor-pointer"
           >
             {menuOpen ? (
               <X key="close" size={20} strokeWidth={2} className="nav-icon" />
@@ -214,7 +211,7 @@ const Navbar = () => {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-zinc-200/80 bg-white/95 px-4 py-4 backdrop-blur-md lg:hidden">
+        <div className="border-t border-edge bg-canvas/95 px-4 py-4 backdrop-blur-md lg:hidden">
           <div className="flex flex-col gap-1">
             <NavLink
               to="/"
@@ -255,7 +252,7 @@ const Navbar = () => {
             </NavLink>
           </div>
 
-          <div className="mt-4 flex flex-col gap-2 border-t border-zinc-200 pt-4">
+          <div className="mt-4 flex flex-col gap-2 border-t border-edge pt-4">
             {isAuthenticated ? (
               <>
                 <button
@@ -263,13 +260,13 @@ const Navbar = () => {
                     setMenuOpen(false);
                     navigate("/profile");
                   }}
-                  className="rounded-lg bg-zinc-100 px-4 py-2.5 text-center text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-200 cursor-pointer"
+                  className="btn-secondary w-full cursor-pointer"
                 >
                   Profile
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-zinc-800 cursor-pointer"
+                  className="btn-primary w-full cursor-pointer"
                 >
                   Logout
                 </button>
@@ -279,14 +276,14 @@ const Navbar = () => {
                 <NavLink
                   to="/signin"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg bg-zinc-100 px-4 py-2.5 text-center text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-200"
+                  className="btn-secondary w-full"
                 >
                   Log in
                 </NavLink>
                 <NavLink
                   to="/signup"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+                  className="btn-primary w-full"
                 >
                   Sign up
                 </NavLink>

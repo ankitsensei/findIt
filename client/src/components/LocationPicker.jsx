@@ -94,24 +94,24 @@ const LocationPicker = ({ value, onChange }) => {
           <Search
             size={16}
             strokeWidth={2}
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
           />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for a place, e.g. Central Library"
-            className="w-full rounded-xl border border-zinc-300 bg-white py-2.5 pl-11 pr-4 text-sm text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
+            className="field pl-11 pr-4"
           />
           {searching && (
-            <span className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-900" />
+            <span className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-edge border-t-blue" />
           )}
         </div>
         <button
           type="button"
           onClick={handleUseMyLocation}
           disabled={locating}
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-zinc-300 bg-white px-3.5 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-60 cursor-pointer"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-edge bg-card px-3.5 py-2.5 text-sm font-medium text-body transition hover:bg-soft-surface hover:text-ink disabled:cursor-wait disabled:opacity-60 cursor-pointer"
         >
           <Locate size={16} strokeWidth={2} />
           {locating ? "Locating..." : "My location"}
@@ -119,18 +119,18 @@ const LocationPicker = ({ value, onChange }) => {
       </div>
 
       {results.length > 0 && (
-        <ul className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <ul className="overflow-hidden rounded-card border border-edge bg-card shadow-card">
           {results.map((r) => (
             <li key={r.place_id}>
               <button
                 type="button"
                 onClick={() => handleSelectResult(r)}
-                className="flex w-full items-start gap-2 px-4 py-2.5 text-left text-sm text-zinc-700 transition hover:bg-zinc-50 cursor-pointer"
+                className="flex w-full items-start gap-2 px-4 py-2.5 text-left text-sm text-body transition hover:bg-soft-surface cursor-pointer"
               >
                 <MapPin
                   size={14}
                   strokeWidth={2}
-                  className="mt-0.5 shrink-0 text-zinc-400"
+                  className="mt-0.5 shrink-0 text-muted"
                 />
                 <span className="line-clamp-2">{r.display_name}</span>
               </button>
@@ -158,11 +158,11 @@ const LocationPicker = ({ value, onChange }) => {
         onMapReady={(map) => {
           mapRef.current = map;
         }}
-        className="h-72 w-full rounded-xl border border-zinc-300 overflow-hidden z-0"
+        className="h-72 w-full rounded-lg border border-edge overflow-hidden z-0"
       />
 
-      <p className="flex items-center gap-1.5 text-xs text-zinc-500">
-        <MapPin size={13} strokeWidth={2} className="text-zinc-400" />
+      <p className="flex items-center gap-1.5 text-xs text-muted">
+        <MapPin size={13} strokeWidth={2} className="text-blue" />
         {hasCoords
           ? `Pinned at ${value.latitude.toFixed(5)}, ${value.longitude.toFixed(5)} — click the map to move it`
           : "Click on the map or search for a place to pin the exact location"}

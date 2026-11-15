@@ -60,19 +60,19 @@ const ViewDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-canvas">
+        <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!item) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-        <p className="text-zinc-600 text-lg">Item not found.</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-canvas">
+        <p className="text-lg text-body">Item not found.</p>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 text-sm text-blue-500 hover:underline"
+          className="mt-4 link-blue text-sm font-medium"
         >
           Go back
         </button>
@@ -175,17 +175,17 @@ const ViewDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
+    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 sm:px-6 md:px-10">
       <div className="mx-auto max-w-3xl">
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-800 transition"
+          className="mb-6 flex items-center gap-2 text-sm text-body hover:text-ink transition"
         >
           <ArrowLeft size={18} />
           Back
         </button>
 
-        <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+        <div className="card overflow-hidden">
           <img
             src={item.image_url}
             alt={item.name}
@@ -194,9 +194,7 @@ const ViewDetails = () => {
 
           <div className="p-6 md:p-8">
             <div className="flex items-start justify-between gap-4">
-              <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900">
-                {item.name}
-              </h1>
+              <h1 className="type-heading">{item.name}</h1>
               <div className="flex shrink-0 items-center gap-2">
                 <span
                   className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
@@ -215,17 +213,17 @@ const ViewDetails = () => {
               </div>
             </div>
 
-            <p className="mt-6 text-sm md:text-base leading-7 text-zinc-600">
+            <p className="mt-6 text-sm md:text-base leading-7 text-body">
               {item.description}
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-col sm:items-start gap-4 text-sm text-zinc-500">
+            <div className="mt-8 flex flex-col sm:flex-col sm:items-start gap-4 text-sm text-body">
               <div className="flex items-center gap-2">
-                <MapPin size={16} strokeWidth={1.8} />
+                <MapPin size={16} strokeWidth={1.8} className="text-muted" />
                 <span>{item.location}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock size={16} strokeWidth={1.8} />
+                <Clock size={16} strokeWidth={1.8} className="text-muted" />
                 <span>
                   {new Date(item.created_at).toLocaleDateString("en-US", {
                     year: "numeric",
@@ -235,7 +233,7 @@ const ViewDetails = () => {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <User size={16} strokeWidth={1.8} />
+                <User size={16} strokeWidth={1.8} className="text-muted" />
                 <p>Posted by:</p>
                 <span>{user.username}</span>
               </div>
@@ -243,7 +241,7 @@ const ViewDetails = () => {
 
             {hasCoords && (
               <div className="mt-8">
-                <p className="mb-2 text-sm font-medium text-zinc-700">
+                <p className="mb-2 text-sm font-medium text-ink">
                   Location on map
                 </p>
                 <MapView
@@ -256,7 +254,7 @@ const ViewDetails = () => {
                       title: item.location,
                     },
                   ]}
-                  className="h-64 w-full overflow-hidden rounded-xl border border-zinc-200 z-0"
+                  className="h-64 w-full overflow-hidden rounded-lg border border-edge z-0"
                 />
               </div>
             )}
@@ -264,14 +262,14 @@ const ViewDetails = () => {
               {isOwner ? (
                 isResolved ? (
                   <div className="mt-4 flex flex-col gap-2">
-                    <div className="w-full rounded-xl bg-emerald-50 px-5 py-3 text-center text-sm font-semibold text-emerald-700">
+                    <div className="w-full rounded-lg bg-emerald-50 px-5 py-3 text-center text-sm font-medium text-emerald-700">
                       Item resolved
                     </div>
                     <button
                       type="button"
                       onClick={handleUnresolveItem}
                       disabled={isUnresolving}
-                      className="w-full rounded-xl border border-zinc-200 px-5 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                      className="btn-secondary w-full"
                     >
                       {isUnresolving
                         ? "Reactivating..."
@@ -283,7 +281,7 @@ const ViewDetails = () => {
                     type="button"
                     onClick={handleResolveItem}
                     disabled={isResolving}
-                    className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                    className="btn-primary mt-4 w-full"
                   >
                     {isResolving ? "Resolving..." : "Mark as resolved"}
                   </button>
@@ -293,7 +291,7 @@ const ViewDetails = () => {
                   type="button"
                   onClick={() => setShowContactModal(true)}
                   disabled={isResolved}
-                  className="mt-4 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                  className="btn-primary mt-4 w-full"
                 >
                   {isResolved ? "Item already resolved" : "Contact Owner"}
                 </button>
@@ -308,20 +306,20 @@ const ViewDetails = () => {
           onClick={() => setShowContactModal(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+            className="w-full max-w-lg card p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-5">
-              <h2 className="text-xl font-semibold text-zinc-900">
+              <h2 className="font-display text-xl text-ink">
                 Contact Owner
               </h2>
-              <p className="mt-1 text-sm text-zinc-500">
+              <p className="mt-1 text-sm text-body">
                 Send a message about this item.
               </p>
             </div>
 
             {/* Item preview */}
-            <div className="flex gap-4 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+            <div className="flex gap-4 rounded-card border border-edge bg-soft-surface p-3">
               <img
                 src={item.image_url}
                 alt={item.name}
@@ -329,13 +327,13 @@ const ViewDetails = () => {
               />
 
               <div className="min-w-0">
-                <h3 className="font-medium text-zinc-900">{item.name}</h3>
+                <h3 className="font-medium text-ink">{item.name}</h3>
 
-                <p className="mt-1 line-clamp-2 text-xs text-zinc-500">
+                <p className="mt-1 line-clamp-2 text-xs text-body">
                   {item.description}
                 </p>
 
-                <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-500">
+                <div className="mt-2 flex items-center gap-1.5 text-xs text-muted">
                   <MapPin size={13} />
                   {item.location}
                 </div>
@@ -344,7 +342,7 @@ const ViewDetails = () => {
             <div className="mt-5">
               <label
                 htmlFor="contact-message"
-                className="mb-1.5 block text-sm font-medium text-zinc-700"
+                className="label"
               >
                 Your message
               </label>
@@ -355,7 +353,7 @@ const ViewDetails = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 rows={5}
                 placeholder="Hi, I think this might be my item..."
-                className="w-full resize-none rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
+                className="field resize-none px-4 py-3"
               />
             </div>
 
@@ -363,7 +361,7 @@ const ViewDetails = () => {
               <button
                 type="button"
                 onClick={() => setShowContactModal(false)}
-                className="flex-1 rounded-xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+                className="btn-secondary flex-1"
               >
                 Cancel
               </button>
@@ -372,7 +370,7 @@ const ViewDetails = () => {
                 type="button"
                 disabled={!message.trim() || isSending}
                 onClick={handleSendMessage}
-                className="flex-1 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+                className="btn-primary flex-1"
               >
                 {isSending ? "Sending..." : "Send Message"}
               </button>

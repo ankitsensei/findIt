@@ -1,5 +1,49 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   findIt design system — "paper, sky and doodles"
+   Warm off-white paper canvas, stone-gray text, small sky-blue accents,
+   ink-line figures and tactile paper details.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Type */
+  --font-display: "roobert", "DM Sans", ui-sans-serif, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Neutrals */
+  --color-canvas: #fafaf9;
+  --color-card: #ffffff;
+  --color-ink: #0c0a09;
+  --color-body: #78716c;
+  --color-secondary: #78726d;
+  --color-muted: #a8a29e;
+  --color-pale-ink: #d6d3d1;
+  --color-edge: #e8e7e5;
+  --color-secondary-fill: #edeceb;
+  --color-soft-surface: #f5f5f4;
+  --color-on-blue: #f8fafc;
+
+  /* Sky blue */
+  --color-blue: #3ba6f1;
+  --color-blue-edge: #3398e1;
+  --color-blue-ink: #236796;
+  --color-blue-mark: #c1e1f7;
+  --color-blue-wash: #e7f2f8;
+
+  /* Radius */
+  --radius-card: 10px;
+  --radius-action: 8px;
+  --radius-mark: 4px;
+
+  /* Shadows */
+  --shadow-card: 0px 4px 16px 0px rgba(0, 0, 0, 0.05);
+  --shadow-stage: 0px 4px 80px 0px rgba(0, 0, 0, 0.15);
+  --shadow-letter:
+    -6px 17px 26px -5px rgba(50, 50, 93, 0.15),
+    -6px 8px 16px -8px rgba(0, 0, 0, 0.3);
+}
+
 @keyframes nav-icon-pop {
   from {
     opacity: 0;
@@ -13,4 +57,265 @@
 
 .nav-icon {
   animation: nav-icon-pop 0.2s ease-out;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-body);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgba(59, 166, 241, 0.22);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* --- Type recipes ------------------------------------------------------ */
+
+  .type-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: -0.014em;
+    color: var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .type-display {
+      font-size: 52px;
+      line-height: 58px;
+      letter-spacing: -0.0212em;
+    }
+  }
+
+  .type-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    color: var(--color-ink);
+  }
+
+  .type-card-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+  }
+
+  .type-lead {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.5;
+    letter-spacing: 0.003em;
+  }
+
+  .type-body-lg {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 27px;
+    letter-spacing: 0.003em;
+  }
+
+  /* --- Highlights -------------------------------------------------------- */
+
+  .mark-wash {
+    background-color: var(--color-blue-wash);
+    color: var(--color-blue-ink);
+    border-radius: var(--radius-mark);
+    padding: 0 8px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .mark-quote {
+    background-color: rgba(59, 166, 241, 0.3);
+    color: var(--color-ink);
+    border-radius: var(--radius-mark);
+    padding: 0 2px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* --- Links ------------------------------------------------------------- */
+
+  .link-blue {
+    color: var(--color-blue);
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .link-blue:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* --- Buttons ----------------------------------------------------------- */
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 24px;
+    border-radius: 8px;
+    background-color: #3ba6f1;
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.1),
+      rgba(0, 0, 0, 0)
+    );
+    border: 1px solid #3398e1;
+    color: #f8fafc;
+    box-shadow:
+      inset 0px 1px 0px rgba(255, 255, 255, 0.3),
+      inset 0px -2px 1px rgba(10, 85, 138, 0.14),
+      0px 1px 2px rgba(0, 0, 0, 0.12);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.004em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .btn-primary:hover {
+    background-color: hsl(205 87% 59% / 0.9);
+  }
+  .btn-primary:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 24px;
+    border-radius: 8px;
+    background: rgba(120, 114, 109, 0.1);
+    color: #78716c;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.004em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .btn-secondary:hover {
+    background-color: hsl(25 5% 45% / 0.15);
+    color: hsl(222.2 47.4% 11.2%);
+  }
+  .btn-secondary:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Compact nav action */
+  .btn-nav {
+    height: 36px;
+    padding: 0 12px;
+  }
+
+  /* --- Surfaces ----------------------------------------------------------- */
+
+  .card {
+    background: #ffffff;
+    border: 1px solid rgba(214, 211, 209, 0.5);
+    border-radius: var(--radius-card);
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Paper sheet for genuinely personal notes */
+  .letter-sheet {
+    background: linear-gradient(
+      #ffffff 0%,
+      rgba(245, 245, 245, 0.5) 70%,
+      rgba(238, 238, 238, 0.2) 100%
+    );
+    box-shadow:
+      -6px 17px 26px -5px rgba(50, 50, 93, 0.15),
+      -6px 8px 16px -8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* --- Form fields --------------------------------------------------------- */
+
+  .field {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--color-edge);
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 23px;
+    letter-spacing: 0.004em;
+    padding: 9px 14px;
+    outline: none;
+    transition:
+      border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:focus {
+    border-color: var(--color-blue);
+    box-shadow: 0 0 0 4px rgba(59, 166, 241, 0.12);
+  }
+  .field-error {
+    border-color: #f87171;
+    box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.1);
+  }
+
+  .label {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 23px;
+    letter-spacing: 0.004em;
+    color: var(--color-ink);
+  }
+
+  /* Small status/setup tag on cards */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    background: var(--color-soft-surface);
+    padding: 4px 10px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--color-secondary);
+    white-space: nowrap;
+  }
 }
