@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { MapPin, Clock, ArrowLeft, User } from "lucide-react";
 import toast from "react-hot-toast";
 import MapView from "./MapView";
+import AppShell from "./AppShell";
 import { API_BASE_URL } from "../config";
 
 const ViewDetails = () => {
@@ -60,23 +61,27 @@ const ViewDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-canvas">
-        <div className="w-12 h-12 border-4 border-blue border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <AppShell>
+        <div className="flex h-[60vh] items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-edge border-t-blue" />
+        </div>
+      </AppShell>
     );
   }
 
   if (!item) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-canvas">
-        <p className="text-lg text-body">Item not found.</p>
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-4 link-blue text-sm font-medium"
-        >
-          Go back
-        </button>
-      </div>
+      <AppShell>
+        <div className="flex h-[60vh] flex-col items-center justify-center">
+          <p className="text-lg text-body">Item not found.</p>
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-4 link-blue text-sm font-medium"
+          >
+            Go back
+          </button>
+        </div>
+      </AppShell>
     );
   }
 
@@ -175,7 +180,7 @@ const ViewDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 sm:px-6 md:px-10">
+    <AppShell>
       <div className="mx-auto max-w-3xl">
         <button
           onClick={() => navigate(-1)}
@@ -378,7 +383,7 @@ const ViewDetails = () => {
           </div>
         </div>
       )}
-    </div>
+    </AppShell>
   );
 };
 
