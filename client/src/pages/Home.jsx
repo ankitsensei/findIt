@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router";
+import Navbar from "../components/Navbar.jsx";
 import {
   Search,
   Users,
@@ -546,6 +547,7 @@ const MatchFragment = () => (
 const Home = () => {
   return (
     <div className="relative min-h-screen overflow-x-clip bg-canvas pt-[52px]">
+      <Navbar />
       <PencilLoops />
 
       <main className="relative">
