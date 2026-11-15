@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../config";
+import AppShell from "../components/AppShell.jsx";
 import { setStoredUser } from "../userSession";
 
 const Profile = () => {
@@ -269,14 +270,16 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6 flex items-center justify-center">
-        <Loader2 size={24} className="animate-spin text-muted" />
-      </div>
+      <AppShell>
+        <div className="flex h-[60vh] items-center justify-center">
+          <Loader2 size={24} className="animate-spin text-muted" />
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
+    <AppShell>
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <h1 className="type-heading">
@@ -653,7 +656,7 @@ const Profile = () => {
           </button>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 
