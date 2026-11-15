@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { MapPin, Clock, Search, Plus } from "lucide-react";
+import AppShell from "../components/AppShell.jsx";
 import { API_BASE_URL } from "../config";
 
 const MyFounds = () => {
@@ -45,15 +46,17 @@ const MyFounds = () => {
 
   if (!foundDataLoaded) {
     return (
-      <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 sm:px-6 md:px-10 flex items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-edge border-t-blue" />
-      </div>
+      <AppShell>
+        <div className="flex h-[60vh] items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-edge border-t-blue" />
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 sm:px-6 md:px-10">
-      <div className="mx-auto max-w-[1024px]">
+    <AppShell>
+      <div className="mx-auto max-w-[1060px]">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="tag">
@@ -229,7 +232,7 @@ const MyFounds = () => {
           </>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 };
 
