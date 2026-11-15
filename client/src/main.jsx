@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import { Toaster } from "react-hot-toast";
 
 import "./index.css";
-import Navbar from "./components/Navbar.jsx";
 import App from "./App.jsx";
 import LostIt from "./pages/LostIt.jsx";
 import FoundIt from "./pages/FoundIt.jsx";
@@ -22,7 +21,6 @@ import VerifyEmail from "./pages/EmailVerify.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Navbar />
       <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route path="/" element={<App />} />
