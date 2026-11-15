@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import { useForm } from "react-hook-form";
 import { Package, Image, Upload } from "lucide-react";
 import LocationPicker from "../components/LocationPicker";
+import AppShell from "../components/AppShell.jsx";
 import { API_BASE_URL } from "../config";
 
 const CreateLostItem = () => {
@@ -78,7 +79,7 @@ const CreateLostItem = () => {
     `field pl-11 pr-3.5 ${hasError ? "field-error" : ""}`;
 
   return (
-    <div className="min-h-screen bg-canvas pt-22 md:pt-26 pb-8 md:pb-12 px-4 md:px-6">
+    <AppShell>
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
           <div className="tag">
@@ -263,7 +264,7 @@ const CreateLostItem = () => {
           </form>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 
