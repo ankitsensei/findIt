@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router";
-import Navbar from "../components/Navbar.jsx";
+import AppShell from "../components/AppShell.jsx";
 import {
   Search,
   Users,
@@ -546,186 +546,29 @@ const MatchFragment = () => (
 --------------------------------------------------------------------------- */
 const Home = () => {
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-canvas pt-[52px]">
-      <Navbar />
-      <PencilLoops />
+    <AppShell>
+      <div className="relative overflow-x-clip bg-canvas">
+        <PencilLoops />
 
-      <main className="relative">
-        {/* --- First screen: highlighted promise + product stage --- */}
-        <section
-          id="top"
-          className="mx-auto max-w-[1024px] scroll-mt-16 px-4 pt-16 sm:px-6 md:pt-24"
-        >
-          <h1 className="type-display max-w-[780px]">
-            Lost it? <span className="mark-wash">Found&nbsp;it?</span>
-            <br className="hidden md:block" />{" "}
-            <span>Post it. We&rsquo;ll match it.</span>
-          </h1>
-
-          <p className="type-lead mt-6 max-w-[680px] text-secondary">
-            Report what you lost — or what you found — with a photo and a pin.
-            findIt keeps watch over both boards and tells you when the two sides
-            look like a pair.
-          </p>
-
-          <div className="mt-6 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
-            <NavLink to="/createlostitem" className="btn-primary flex-1">
-              Report a lost item
-            </NavLink>
-            <NavLink to="/createfounditem" className="btn-secondary flex-1">
-              Report a found item
-              <ArrowUpRight size={14} strokeWidth={2.2} />
-            </NavLink>
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin size={14} strokeWidth={1.8} />
-              Location based
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Clock size={14} strokeWidth={1.8} />
-              Listed instantly
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Users size={14} strokeWidth={1.8} />
-              Free for everyone
-            </span>
-          </div>
-
-          <div className="mt-12 md:mt-16">
-            <ProductStage />
-          </div>
-        </section>
-
-        {/* --- Capability mosaic --- */}
-        <section
-          id="why-findit"
-          className="mx-auto max-w-[1024px] scroll-mt-16 px-4 py-24 sm:px-6 md:px-10"
-        >
-          <h2 className="type-heading max-w-[680px]">
-            Everything you need{" "}
-            <span className="text-pale-ink">to bring things home.</span>
-          </h2>
-          <div className="mt-4 grid gap-4 text-secondary md:grid-cols-[7fr_5fr] md:gap-10">
-            <p className="type-body-lg">
-              Every report is a small, complete record: what it is, where it was
-              last seen, and a photo so nobody has to guess.
-            </p>
-            <p className="type-body-lg">
-              Behind the scenes, findIt compares new found reports against open
-              lost reports and flags the pairs worth a message.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            {largeFeatures.map((f) => (
-              <div key={f.title} className="card relative flex flex-col overflow-hidden p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-2.5">
-                    <f.icon size={18} strokeWidth={2} className="shrink-0 text-blue" />
-                    <h3 className="type-card-heading">{f.title}</h3>
-                  </div>
-                  <span className="tag">{f.tag}</span>
-                </div>
-                <p className="mt-3 max-w-[430px] text-sm leading-[23px] text-body">
-                  {f.body}
-                </p>
-                <NavLink
-                  to={f.link.to}
-                  className="link-blue mt-2 inline-flex items-center gap-1 text-sm font-medium"
-                >
-                  {f.link.label}
-                  <ArrowUpRight size={14} strokeWidth={2.2} />
-                </NavLink>
-                <div className="relative mt-8 h-[150px]">
-                  {f.fragment === "form" ? <ReportFormFragment /> : <MatchFragment />}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* proof, interrupting the grid */}
-          <div className="mt-16 grid gap-10 md:grid-cols-2 md:gap-y-8">
-            {quotes.map((q) => (
-              <figure key={q.name}>
-                <blockquote className="type-body-lg text-body">
-                  &ldquo;{q.before}
-                  <span className="mark-quote">{q.mark}</span>&rdquo;
-                </blockquote>
-                <figcaption className="mt-4 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-soft-surface text-sm font-medium text-secondary">
-                    {q.initial}
-                  </span>
-                  <span className="text-sm text-ink">
-                    {q.name} <span className="text-muted">· {q.role}</span>
-                  </span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-
-          <div className="mt-16 grid gap-4 sm:grid-cols-3">
-            {smallFeatures.map((f) => (
-              <div key={f.title} className="card p-6">
-                <f.icon size={18} strokeWidth={2} className="text-blue" />
-                <h3 className="type-card-heading mt-3">{f.title}</h3>
-                <p className="mt-2 text-sm leading-[23px] text-body">{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* --- How it works --- */}
-        <section
-          id="how-it-works"
-          className="mx-auto max-w-[1024px] scroll-mt-16 px-4 pb-24 sm:px-6 md:px-10"
-        >
-          <h2 className="type-heading max-w-[680px]">
-            How it works{" "}
-            <span className="text-pale-ink">from report to reunion.</span>
-          </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {steps.map((s) => (
-              <div key={s.number} className="card p-6">
-                <span className="font-display text-sm text-muted">{s.number}</span>
-                <h3 className="type-card-heading mt-3">{s.title}</h3>
-                <p className="mt-2 text-sm leading-[23px] text-body">{s.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* --- Illustrated action interlude --- */}
-        <section className="relative mx-auto max-w-[1024px] px-4 pb-24 pt-4 sm:px-6 md:px-10">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 100 60"
-            fill="none"
-            className="absolute left-2 top-24 hidden w-20 opacity-60 lg:block"
+        <div className="relative">
+          {/* --- First screen: highlighted promise + product stage --- */}
+          <section
+            id="top"
+            className="mx-auto max-w-[1024px] scroll-mt-16 px-4 pt-16 sm:px-6 md:pt-24"
           >
-            <path d="M2 54 L96 12" stroke="#3ba6f1" strokeWidth="1.4" />
-            <path d="M10 44 L86 8" stroke="#78716c" strokeWidth="1" opacity="0.4" />
-          </svg>
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 100 60"
-            fill="none"
-            className="absolute right-2 top-56 hidden w-20 opacity-60 lg:block"
-          >
-            <path d="M98 54 L4 12" stroke="#3ba6f1" strokeWidth="1.4" />
-            <path d="M90 44 L14 8" stroke="#78716c" strokeWidth="1" opacity="0.4" />
-          </svg>
+            <h1 className="type-display max-w-[780px]">
+              Lost it? <span className="mark-wash">Found&nbsp;it?</span>
+              <br className="hidden md:block" />{" "}
+              <span>Post it. We&rsquo;ll match it.</span>
+            </h1>
 
-          <InterludeScene />
-
-          <div className="mx-auto mt-8 max-w-[720px] text-center">
-            <h2 className="type-heading">Post one report. See matches in minutes.</h2>
-            <p className="type-body-lg mt-4 text-secondary">
-              Describe it once, pin the spot, and get on with your day. We&rsquo;ll
-              watch the found board for you.
+            <p className="type-lead mt-6 max-w-[680px] text-secondary">
+              Report what you lost — or what you found — with a photo and a pin.
+              findIt keeps watch over both boards and tells you when the two sides
+              look like a pair.
             </p>
-            <div className="mx-auto mt-8 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
+
+            <div className="mt-6 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
               <NavLink to="/createlostitem" className="btn-primary flex-1">
                 Report a lost item
               </NavLink>
@@ -734,99 +577,257 @@ const Home = () => {
                 <ArrowUpRight size={14} strokeWidth={2.2} />
               </NavLink>
             </div>
-            <p className="mt-4 text-sm text-muted">
-              Free to use · No credit card · Not even an ad
-            </p>
-          </div>
-        </section>
 
-        {/* --- Illustrated closing card --- */}
-        <section className="mx-auto max-w-[1024px] px-4 pb-24 sm:px-6 md:px-10">
-          <div className="card relative p-6 md:p-8">
-            <div className="max-w-[560px]">
-              <h2 className="type-heading">
-                Every item deserves a way home.{" "}
-                <span className="text-pale-ink">Help one along today.</span>
-              </h2>
-              <p className="type-body-lg mt-4 max-w-[520px] text-secondary">
-                Browse what&rsquo;s already been posted, or add yours — it takes
-                about a minute, and someone nearby is probably looking right now.
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin size={14} strokeWidth={1.8} />
+                Location based
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock size={14} strokeWidth={1.8} />
+                Listed instantly
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Users size={14} strokeWidth={1.8} />
+                Free for everyone
+              </span>
+            </div>
+
+            <div className="mt-12 md:mt-16">
+              <ProductStage />
+            </div>
+          </section>
+
+          {/* --- Capability mosaic --- */}
+          <section
+            id="why-findit"
+            className="mx-auto max-w-[1024px] scroll-mt-16 px-4 py-24 sm:px-6 md:px-10"
+          >
+            <h2 className="type-heading max-w-[680px]">
+              Everything you need{" "}
+              <span className="text-pale-ink">to bring things home.</span>
+            </h2>
+            <div className="mt-4 grid gap-4 text-secondary md:grid-cols-[7fr_5fr] md:gap-10">
+              <p className="type-body-lg">
+                Every report is a small, complete record: what it is, where it was
+                last seen, and a photo so nobody has to guess.
               </p>
-              <div className="mt-6 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
-                <NavLink to="/lostit" className="btn-primary flex-1">
-                  Browse lost items
+              <p className="type-body-lg">
+                Behind the scenes, findIt compares new found reports against open
+                lost reports and flags the pairs worth a message.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-4 md:grid-cols-2">
+              {largeFeatures.map((f) => (
+                <div key={f.title} className="card relative flex flex-col overflow-hidden p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-2.5">
+                      <f.icon size={18} strokeWidth={2} className="shrink-0 text-blue" />
+                      <h3 className="type-card-heading">{f.title}</h3>
+                    </div>
+                    <span className="tag">{f.tag}</span>
+                  </div>
+                  <p className="mt-3 max-w-[430px] text-sm leading-[23px] text-body">
+                    {f.body}
+                  </p>
+                  <NavLink
+                    to={f.link.to}
+                    className="link-blue mt-2 inline-flex items-center gap-1 text-sm font-medium"
+                  >
+                    {f.link.label}
+                    <ArrowUpRight size={14} strokeWidth={2.2} />
+                  </NavLink>
+                  <div className="relative mt-8 h-[150px]">
+                    {f.fragment === "form" ? <ReportFormFragment /> : <MatchFragment />}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* proof, interrupting the grid */}
+            <div className="mt-16 grid gap-10 md:grid-cols-2 md:gap-y-8">
+              {quotes.map((q) => (
+                <figure key={q.name}>
+                  <blockquote className="type-body-lg text-body">
+                    &ldquo;{q.before}
+                    <span className="mark-quote">{q.mark}</span>&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-4 flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-soft-surface text-sm font-medium text-secondary">
+                      {q.initial}
+                    </span>
+                    <span className="text-sm text-ink">
+                      {q.name} <span className="text-muted">· {q.role}</span>
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+
+            <div className="mt-16 grid gap-4 sm:grid-cols-3">
+              {smallFeatures.map((f) => (
+                <div key={f.title} className="card p-6">
+                  <f.icon size={18} strokeWidth={2} className="text-blue" />
+                  <h3 className="type-card-heading mt-3">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-[23px] text-body">{f.body}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* --- How it works --- */}
+          <section
+            id="how-it-works"
+            className="mx-auto max-w-[1024px] scroll-mt-16 px-4 pb-24 sm:px-6 md:px-10"
+          >
+            <h2 className="type-heading max-w-[680px]">
+              How it works{" "}
+              <span className="text-pale-ink">from report to reunion.</span>
+            </h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {steps.map((s) => (
+                <div key={s.number} className="card p-6">
+                  <span className="font-display text-sm text-muted">{s.number}</span>
+                  <h3 className="type-card-heading mt-3">{s.title}</h3>
+                  <p className="mt-2 text-sm leading-[23px] text-body">{s.body}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* --- Illustrated action interlude --- */}
+          <section className="relative mx-auto max-w-[1024px] px-4 pb-24 pt-4 sm:px-6 md:px-10">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 100 60"
+              fill="none"
+              className="absolute left-2 top-24 hidden w-20 opacity-60 lg:block"
+            >
+              <path d="M2 54 L96 12" stroke="#3ba6f1" strokeWidth="1.4" />
+              <path d="M10 44 L86 8" stroke="#78716c" strokeWidth="1" opacity="0.4" />
+            </svg>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 100 60"
+              fill="none"
+              className="absolute right-2 top-56 hidden w-20 opacity-60 lg:block"
+            >
+              <path d="M98 54 L4 12" stroke="#3ba6f1" strokeWidth="1.4" />
+              <path d="M90 44 L14 8" stroke="#78716c" strokeWidth="1" opacity="0.4" />
+            </svg>
+
+            <InterludeScene />
+
+            <div className="mx-auto mt-8 max-w-[720px] text-center">
+              <h2 className="type-heading">Post one report. See matches in minutes.</h2>
+              <p className="type-body-lg mt-4 text-secondary">
+                Describe it once, pin the spot, and get on with your day. We&rsquo;ll
+                watch the found board for you.
+              </p>
+              <div className="mx-auto mt-8 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
+                <NavLink to="/createlostitem" className="btn-primary flex-1">
+                  Report a lost item
                 </NavLink>
-                <NavLink to="/foundit" className="btn-secondary flex-1">
-                  Browse found items
+                <NavLink to="/createfounditem" className="btn-secondary flex-1">
+                  Report a found item
+                  <ArrowUpRight size={14} strokeWidth={2.2} />
                 </NavLink>
               </div>
-            </div>
-            <div className="pointer-events-none absolute -top-8 bottom-6 right-4 hidden w-[320px] lg:block xl:right-8 xl:w-[360px]">
-              <ClosingFigure />
-            </div>
-          </div>
-        </section>
-
-        {/* --- Open directory footer --- */}
-        <footer className="mx-auto max-w-[1024px] px-4 pb-10 pt-8 sm:px-6 md:px-10">
-          <div className="grid gap-10 md:grid-cols-6 md:gap-6">
-            <div className="md:col-span-2">
-              <NavLink to="/" className="inline-flex items-center gap-2.5">
-                <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md ring-1 ring-edge">
-                  <img
-                    src="/logo.jpeg"
-                    alt="findIt logo"
-                    className="h-full w-full object-cover"
-                  />
-                </span>
-                <span className="font-display text-lg font-medium tracking-[-0.01em] text-ink">
-                  findIt
-                </span>
-              </NavLink>
-              <p className="mt-4 max-w-[250px] text-sm leading-[23px] text-body">
-                Lost &amp; found for neighbours, campuses and café noticeboards.
-              </p>
-              <p className="mt-3 inline-flex items-center gap-2 text-xs text-muted">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-                Matching live
+              <p className="mt-4 text-sm text-muted">
+                Free to use · No credit card · Not even an ad
               </p>
             </div>
+          </section>
 
-            {footerColumns.map((col) => (
-              <nav key={col.title}>
-                <p className="text-sm font-medium text-ink">{col.title}</p>
-                <ul className="mt-3 space-y-2">
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      {link.to.startsWith("/#") ? (
-                        <a
-                          href={link.to.replace("/#", "#")}
-                          className="text-sm text-body transition-colors hover:text-ink"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <NavLink
-                          to={link.to}
-                          className="text-sm text-body transition-colors hover:text-ink"
-                        >
-                          {link.label}
-                        </NavLink>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ))}
-          </div>
+          {/* --- Illustrated closing card --- */}
+          <section className="mx-auto max-w-[1024px] px-4 pb-24 sm:px-6 md:px-10">
+            <div className="card relative p-6 md:p-8">
+              <div className="max-w-[560px]">
+                <h2 className="type-heading">
+                  Every item deserves a way home.{" "}
+                  <span className="text-pale-ink">Help one along today.</span>
+                </h2>
+                <p className="type-body-lg mt-4 max-w-[520px] text-secondary">
+                  Browse what&rsquo;s already been posted, or add yours — it takes
+                  about a minute, and someone nearby is probably looking right now.
+                </p>
+                <div className="mt-6 flex w-full max-w-[400px] flex-col gap-3 sm:flex-row sm:gap-4">
+                  <NavLink to="/lostit" className="btn-primary flex-1">
+                    Browse lost items
+                  </NavLink>
+                  <NavLink to="/foundit" className="btn-secondary flex-1">
+                    Browse found items
+                  </NavLink>
+                </div>
+              </div>
+              <div className="pointer-events-none absolute -top-8 bottom-6 right-4 hidden w-[320px] lg:block xl:right-8 xl:w-[360px]">
+                <ClosingFigure />
+              </div>
+            </div>
+          </section>
 
-          <div className="mt-24 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-            <span>© {new Date().getFullYear()} findIt</span>
-            <span>No ads. No fees. Just stuff going home.</span>
-          </div>
-        </footer>
-      </main>
-    </div>
+          {/* --- Open directory footer --- */}
+          <footer className="mx-auto max-w-[1024px] px-4 pb-10 pt-8 sm:px-6 md:px-10">
+            <div className="grid gap-10 md:grid-cols-6 md:gap-6">
+              <div className="md:col-span-2">
+                <NavLink to="/" className="inline-flex items-center gap-2.5">
+                  <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md ring-1 ring-edge">
+                    <img
+                      src="/logo.jpeg"
+                      alt="findIt logo"
+                      className="h-full w-full object-cover"
+                    />
+                  </span>
+                  <span className="font-display text-lg font-medium tracking-[-0.01em] text-ink">
+                    findIt
+                  </span>
+                </NavLink>
+                <p className="mt-4 max-w-[250px] text-sm leading-[23px] text-body">
+                  Lost &amp; found for neighbours, campuses and café noticeboards.
+                </p>
+                <p className="mt-3 inline-flex items-center gap-2 text-xs text-muted">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                  Matching live
+                </p>
+              </div>
+
+              {footerColumns.map((col) => (
+                <nav key={col.title}>
+                  <p className="text-sm font-medium text-ink">{col.title}</p>
+                  <ul className="mt-3 space-y-2">
+                    {col.links.map((link) => (
+                      <li key={link.label}>
+                        {link.to.startsWith("/#") ? (
+                          <a
+                            href={link.to.replace("/#", "#")}
+                            className="text-sm text-body transition-colors hover:text-ink"
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <NavLink
+                            to={link.to}
+                            className="text-sm text-body transition-colors hover:text-ink"
+                          >
+                            {link.label}
+                          </NavLink>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ))}
+            </div>
+
+            <div className="mt-24 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+              <span>© {new Date().getFullYear()} findIt</span>
+              <span>No ads. No fees. Just stuff going home.</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </AppShell>
   );
 };
 
